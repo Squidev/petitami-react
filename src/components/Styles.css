@@ -1,0 +1,84 @@
+.titulo {
+  font-size: 30px;
+  margin: 0px 0px 1px 0px;
+  display: block;
+}
+
+.div {
+  text-align: center;
+  margin: 100px 25% 120px 25%;
+  min-height: 300px;
+  min-width: 250px;
+  border-style: solid;
+  padding: 10px 10px 10px 10px;
+}
+
+.bottomleft {
+  position: relative;
+  bottom: -70px;
+  left: -308px;
+}
+
+.instagram {
+  display: inline-block;
+  width: 70px;
+  height: 70px;
+  text-align: center;
+  border-radius: 60px;
+  color: #fff;
+  font-size: 40px;
+  line-height: 65px;
+  vertical-align: middle;
+  background: #d6249f;
+  background: radial-gradient(circle at 30% 107%, #fdf497 0%, #fdf497 5%, #fd5949 45%,#d6249f 60%,#285AEB 90%);
+  box-shadow: 0px 3px 10px rgba(0,0,0,.25);
+}
+
+.header {
+  background-color: #F1F1F1;
+  text-align: center;
+  padding: 40px;
+}
+
+.footer {
+  background-color: #F1F1F1;
+  text-align: center;
+  padding: 25px;
+}
+
+.boton {  
+  text-decoration: none;
+  margin-top: 20px;
+  padding: 10px;
+  font-weight: 600;
+  font-size: 20px;
+  color: #ffffff;
+  background-color: #1883ba;
+  border-radius: 6px;
+  border: 2px solid #0016b0;
+}
+
+.boton:hover{
+  color: #1883ba;
+  background-color: #ffffff;
+}
+
+.campos {
+  margin: 8px 8px 8px 8px;
+  display: inline-block;
+}
+
+@media only screen and (max-width: 1200px) {
+  .responsive {
+    width: 50%;
+    margin: 0;
+    padding: 0%;
+  }
+}
+@media only screen and (max-width: 500px) {
+  .responsive {
+    width: 90%;
+    margin: 0;
+    padding: 0%;
+  }
+}
