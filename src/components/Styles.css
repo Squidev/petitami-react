@@ -6,17 +6,69 @@
 
 .div {
   text-align: center;
-  margin: 100px 25% 120px 25%;
+  margin: 5% 25% 5% 25%;
   min-height: 300px;
   min-width: 250px;
-  border-style: solid;
+  border-style: ridge;
   padding: 10px 10px 10px 10px;
+}
+
+select:required:invalid {
+  color: gray;
+}
+option[value=""][disabled] {
+  display: none;
+}
+
+option {
+  color: black;
+}
+
+.imageResponsive{
+  max-width: 100%;
+  border-radius: 50%;
+  border-style: ridge;
+  max-width: 960px; 
+  width:100%;
+  height:auto;
+}
+
+.yellow{
+  background-color: yellow;
+  border: ridge;
+}
+
+.leftfloat{
+    float: left;
+    width: 120px;
+    padding: 20px;
 }
 
 .bottomleft {
   position: relative;
-  bottom: -70px;
-  left: -308px;
+  bottom: -20px;
+  left: -300px;
+}
+
+.fa-facebook {
+  opacity: 0.7;
+  padding: 20px;
+  font-size: 30px;
+  width: 30px;
+  text-align: center;
+  text-decoration: none;
+  margin: 5px 2px;
+  border-radius: 50%;
+  background: #3B5998;
+  color: white;
+}
+.fa-gmail{
+  margin:40px auto;
+  background:#E41F1A;
+  width:70px;
+  height:70px;
+  border-radius:50%;
+  box-shadow:0 0 10px 3px black;
 }
 
 .instagram {
@@ -37,7 +89,7 @@
 .header {
   background-color: #F1F1F1;
   text-align: center;
-  padding: 40px;
+  padding: 30px;
 }
 
 .footer {

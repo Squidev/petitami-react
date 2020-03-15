@@ -10,19 +10,12 @@ class DogInfo extends Component {
 
   componentDidMount() {
     this.setState({
+      dogImage: "",
       dogName: "Chocoperro",
+      dogDescription: "Descripcion",
+      ownerDirection: "Dirreccion",
       ownerName: "Chocoperro Owner",
-      contactMediums: [
-        {
-          contactMediumName: "Facebook",
-          value: "www.facebook.com/ChocoperroOwner"
-        },
-        {
-          contactMediumName: "Instagram",
-          value: "www.instagram.com/ChocoperroOwner"
-        },
-        { contactMediumName: "Tel", value: "2614785498" }
-      ]
+      contactMediums: [{ contactMediumName: "Tel", value: "2614785498" }]
     });
   }
 
@@ -32,11 +25,40 @@ class DogInfo extends Component {
         <header className="header">Header</header>
 
         <div className="div responsive">
-          <img src={""} alt={"Perro image"} />
+          <div className="yellow">
+            <div className="leftfloat">
+              {" "}
+              <div className="imageContainer">
+              <img
+                //width="304"
+                //height="236"
+                //class="img-circle"
+                className="imageResponsive"
+                src={require("./perro.jpg")}
+                alt={"Perro"}
+              />{" "}
+              </div>
+              <br/>
+            </div>
+            <br />
+            <label className="campos titulo"> {this.state.dogName}</label>
+            <br />
+            <br />
+            <br />
+          </div>
           <br />
-          <label>Nombre: {this.state.dogName}</label>
-          <br />
-          <label>Dueño: {this.state.ownerName}</label>
+          <br/>
+          <label className="campos">
+            {this.state.dogDescription}
+          </label>
+          <hr></hr>
+          <label className="campos">{this.state.ownerName}</label>
+          <hr></hr>
+          <br></br>
+          <label className="campos">
+            {this.state.ownerDirection}
+          </label>
+          <hr></hr>
           <ul>
             {this.state.contactMediums.map(contactMedium => (
               <li>
@@ -44,10 +66,21 @@ class DogInfo extends Component {
               </li>
             ))}
           </ul>
+          <hr></hr>
           <a href="https://www.instagram.com">
-          <span class="instagram bottomleft">
-            <span class="fa fa-instagram"></span>
-          </span>
+            <span class="instagram bottomleft">
+              <span class="fa fa-instagram"></span>
+            </span>
+          </a>
+          <a href="https://www.facebook.com">
+            <span class="bottomleft">
+              <span class="fa fa-facebook"></span>
+            </span>
+          </a>
+          <a href="">
+            <span class="bottomleft">
+              <span class="fa fa-gmail"></span>
+            </span>
           </a>
         </div>
         <footer className="footer">Footer</footer>

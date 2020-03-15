@@ -1,21 +1,48 @@
 import React, { Component } from "react";
 import "./Styles.css";
+import ContactMedium from "./ContactMedium";
 
 class DogForm extends Component {
   state = {
-    name: "",
+    dogId: "",
+    dogName: "",
     photo: "",
-    ownarName: "",
+    ownerName: "",
     ownerId: "",
-    contactMedium: [
+    ownerDni: "",
+    contactMediums: [
       {
-        type: "",
-        value: ""
+        contactMediumId: "",
+        contactMediumName: "",
+        contactMediumValue: ""
       }
     ]
   };
 
-  componentDidMount() {}
+  componentDidMount() {
+    //Llamada AJAX
+    var initialState = {
+      dogId: 34,
+      dogName: "Chocoperro",
+      photo: "",
+      ownerName: "Chocoperro Owner",
+      ownerId: 21,
+      ownerDni: 50235123,
+      contactMediums: [
+        {
+          contactMediumId: 53,
+          contactMediumName: "Facebook",
+          contactMediumValue: "www.facebook.com/ChocoperroOwner"
+        },
+        {
+          contactMediumId: 56,
+          contactMediumName: "Instagram",
+          contactMediumValue: "www.instagram.com/ChocoperroOwner"
+        }
+      ]
+    };
+    this.setState(initialState);
+  }
 
   render() {
     return (
@@ -35,29 +62,54 @@ class DogForm extends Component {
           </label>{" "}
           <input classname="" type="file"></input>
           <br />
+          <label className="campos" id="ownerId">
+            Dni del dueño:
+          </label>{" "}
+          <input type="text" onBlur={() => this.CheckOwner()}></input>
+          <br />
           <label className="campos" id="ownerName">
             Nombre del dueño:
           </label>{" "}
           <input type="text"></input>
-          <br />
-          <label className="campos" id="ownerId">
-            Dni del dueño:
-          </label>{" "}
-          <input type="text"></input>
           <ul>
             Medios de Contacto
-            <li>
-              <label className="campos">Tipo:</label>{" "}
-              <select classname="campos" id="type">
-                <option value="Instagram">Instagram</option>
-                <option value="Facebook">Facebook</option>
-                <option value="Whatsapp">Whatsapp</option>
-                <option value="Telefono">Telefono</option>
-              </select>
-              <label className="campos">Contacto:</label>{" "}
-              <input type="text" id="value"></input> <br />
-              <button></button>
-            </li>
+            {this.state.contactMediums.filter(c => c.contactMediumValue !== "").map(contactMedium => (
+              <ContactMedium
+                contactMediumId={contactMedium.contactMediumId}
+                contactMediumName={contactMedium.contactMediumName}
+                contactMediumValue={contactMedium.contactMediumValue}
+                contactMediumIndex={this.state.contactMediums.indexOf(
+                  contactMedium
+                )}
+                saveContact={this.saveContact}
+                removeContact={this.removeContact}
+              ></ContactMedium>
+            ))}
+            {this.state.contactMediums
+              .filter(c => c.contactMediumValue === "")
+              .map(c => (
+                <li>
+                  <label className="campos">Index:</label>{" "}
+                  <label className="campos">{this.state.contactMediums.indexOf(c)}</label>{" "}
+                  <label className="campos">Tipo:</label>{" "}
+                  <select
+                    required
+                    classname="campos"
+                  >
+                    <option value="" disabled selected hidden>
+                      Elegir...
+                    </option>
+                    <option value="Instagram">Instagram</option>
+                    <option value="Facebook">Facebook</option>
+                    <option value="Whatsapp">Whatsapp</option>
+                    <option value="Telefono">Telefono</option>
+                  </select>
+                  <label className="campos">Contacto:</label>{" "}
+                  <input onBlur={() => this.SaveContact()}></input>{" "}
+                </li>
+              ))}
+              <br/>
+            <button onClick={() => this.AddContact()}>Agregar Contacto</button>
           </ul>
           <button onClick={() => this.SendFormData()} className="boton">
             Guardar
@@ -69,10 +121,33 @@ class DogForm extends Component {
     );
   }
 
+  AddContact() {
+    const contactMedium = {
+      contactMediumId: 0,
+      contactMediumName: "",
+      contactMediumValue: ""
+    };
+    const contacts = [...this.state.contactMediums];
+    contacts.push(contactMedium);
+    this.setState({ contactMediums: contacts });
+  }
+
+  saveContact() {}
+
+  removeContact = contactMediumIndex => {
+    const contacts = [...this.state.contactMediums];
+    const index = contactMediumIndex;
+    contacts.splice(index, contactMediumIndex);
+    this.setState({ contactMediums: contacts });
+  };
+
+  CheckOwner() {}
+
   SendFormData() {
-    return alert("b");
-    //const data = new FormData(document.getElementById('form'));
-    //fetch('httpapi/v1/dog')
+    /*fetch('',{
+      method:'POST',
+      body: JSON.stringify(this.state)
+    })*/
   }
 }
 
