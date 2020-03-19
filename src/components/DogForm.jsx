@@ -38,6 +38,11 @@ class DogForm extends Component {
           contactMediumId: 56,
           contactMediumName: "Instagram",
           contactMediumValue: "www.instagram.com/ChocoperroOwner"
+        },
+        {
+          contactMediumId: 58,
+          contactMediumName: "Telefono",
+          contactMediumValue: "2616134800"
         }
       ]
     };
@@ -60,7 +65,7 @@ class DogForm extends Component {
           <label className="campos" id="photo">
             Foto del perro:
           </label>{" "}
-          <input classname="" type="file"></input>
+          <input className="" type="file"></input>
           <br />
           <label className="campos" id="ownerId">
             Dni del dueño:
@@ -92,9 +97,9 @@ class DogForm extends Component {
                   <label className="campos">Index:</label>{" "}
                   <label className="campos">{this.state.contactMediums.indexOf(c)}</label>{" "}
                   <label className="campos">Tipo:</label>{" "}
-                  <select
+                  <select id="type"
                     required
-                    classname="campos"
+                    className="campos"
                   >
                     <option value="" disabled selected hidden>
                       Elegir...
@@ -105,13 +110,13 @@ class DogForm extends Component {
                     <option value="Telefono">Telefono</option>
                   </select>
                   <label className="campos">Contacto:</label>{" "}
-                  <input onBlur={() => this.SaveContact()}></input>{" "}
+                  <input id="value" onBlur={() => this.saveContact(this.state.contactMediums.indexOf(c))}></input>{" "}
                 </li>
               ))}
               <br/>
-            <button onClick={() => this.AddContact()}>Agregar Contacto</button>
+            <button onClick={() => this.addContact()}>Agregar Contacto</button>
           </ul>
-          <button onClick={() => this.SendFormData()} className="boton">
+          <button onClick={() => this.sendFormData()} className="boton">
             Guardar
           </button>
         </div>
@@ -121,7 +126,7 @@ class DogForm extends Component {
     );
   }
 
-  AddContact() {
+  addContact() {
     const contactMedium = {
       contactMediumId: 0,
       contactMediumName: "",
@@ -132,7 +137,11 @@ class DogForm extends Component {
     this.setState({ contactMediums: contacts });
   }
 
-  saveContact() {}
+  saveContact = (contactMediumIndex) => {
+    const contacts = [...this.state.contactMediums];
+    contacts[contactMediumIndex].contactMediumValue = "??????";
+    this.setState( {contactMediums: contacts });
+  }
 
   removeContact = contactMediumIndex => {
     const contacts = [...this.state.contactMediums];
@@ -143,7 +152,7 @@ class DogForm extends Component {
 
   CheckOwner() {}
 
-  SendFormData() {
+  sendFormData() {
     /*fetch('',{
       method:'POST',
       body: JSON.stringify(this.state)

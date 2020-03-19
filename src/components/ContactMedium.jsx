@@ -12,7 +12,7 @@ class ContactMedium extends Component {
           <label className="campos">Index:</label>{" "}
           <label className="campos">{contactMediumIndex}</label>{" "}
           <label className="campos">Tipo:</label>{" "}
-          <label classname="campos">{contactMediumName}</label>
+          <label className="campos">{contactMediumName}</label>
           <label className="campos">Contacto:</label>{" "}
           <input
             value={contactMediumValue}
