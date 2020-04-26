@@ -5,17 +5,17 @@ class DogInfo extends Component {
   state = {
     dogName: "",
     ownerName: "",
-    contactMediums: []
+    contactMediums: [],
   };
 
   componentDidMount() {
     this.setState({
       dogImage: "",
-      dogName: "Chocoperro",
+      dogName: "Perro",
       dogDescription: "Descripcion",
       ownerDirection: "Dirreccion",
-      ownerName: "Chocoperro Owner",
-      contactMediums: [{ contactMediumName: "Tel", value: "2614785498" }]
+      ownerName: "Nombre del Dueño",
+      contactMediums: [{ contactMediumName: "Tel", value: "2614785498" }],
     });
   }
 
@@ -29,16 +29,16 @@ class DogInfo extends Component {
             <div className="leftfloat">
               {" "}
               <div className="imageContainer">
-              <img
-                //width="304"
-                //height="236"
-                //class="img-circle"
-                className="imageResponsive"
-                src={require("./perro.jpg")}
-                alt={"Perro"}
-              />{" "}
+                <img
+                  //width="304"
+                  //height="236"
+                  //class="img-circle"
+                  className="imageResponsive"
+                  src={require("./perro.jpg")}
+                  alt={"Perro"}
+                />{" "}
               </div>
-              <br/>
+              <br />
             </div>
             <br />
             <label className="campos titulo"> {this.state.dogName}</label>
@@ -47,20 +47,16 @@ class DogInfo extends Component {
             <br />
           </div>
           <br />
-          <br/>
-          <label className="campos">
-            {this.state.dogDescription}
-          </label>
+          <br />
+          <label className="campos">{this.state.dogDescription}</label>
           <hr></hr>
           <label className="campos">{this.state.ownerName}</label>
           <hr></hr>
           <br></br>
-          <label className="campos">
-            {this.state.ownerDirection}
-          </label>
+          <label className="campos">{this.state.ownerDirection}</label>
           <hr></hr>
           <ul>
-            {this.state.contactMediums.map(contactMedium => (
+            {this.state.contactMediums.map((contactMedium) => (
               <li>
                 {contactMedium.contactMediumName} : {contactMedium.value}
               </li>
@@ -68,19 +64,13 @@ class DogInfo extends Component {
           </ul>
           <hr></hr>
           <a href="https://www.instagram.com">
-            <span class="instagram bottomleft">
-              <span class="fa fa-instagram"></span>
-            </span>
+            <span class="fa fa-instagram"></span>
           </a>
           <a href="https://www.facebook.com">
-            <span class="bottomleft">
-              <span class="fa fa-facebook"></span>
-            </span>
+            <span class="fa fa-facebook"></span>
           </a>
           <a href="">
-            <span class="bottomleft">
-              <span class="fa fa-gmail"></span>
-            </span>
+            <span class="fa fa-google"></span>
           </a>
         </div>
         <footer className="footer">Footer</footer>

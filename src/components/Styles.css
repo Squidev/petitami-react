@@ -6,7 +6,7 @@
 
 .div {
   text-align: center;
-  margin: 5% 25% 5% 25%;
+  margin: 2% 25% 1% 25%;
   min-height: 300px;
   min-width: 250px;
   border-style: ridge;
@@ -24,54 +24,51 @@ option {
   color: black;
 }
 
-.imageResponsive{
+.imageResponsive {
   max-width: 100%;
   border-radius: 50%;
   border-style: ridge;
-  max-width: 960px; 
-  width:100%;
-  height:auto;
+  max-width: 960px;
+  width: 100%;
+  height: auto;
 }
 
-.yellow{
+.yellow {
   background-color: yellow;
   border: ridge;
 }
 
-.leftfloat{
-    float: left;
-    width: 120px;
-    padding: 20px;
-}
-
-.bottomleft {
-  position: relative;
-  bottom: -20px;
-  left: -300px;
+.leftfloat {
+  float: left;
+  width: 120px;
+  padding: 20px;
 }
 
 .fa-facebook {
-  opacity: 0.7;
   padding: 20px;
   font-size: 30px;
   width: 30px;
   text-align: center;
   text-decoration: none;
-  margin: 5px 2px;
+  margin: 9px 10px;
   border-radius: 50%;
-  background: #3B5998;
+  background: #3b5998;
   color: white;
+  vertical-align: middle;
 }
-.fa-gmail{
-  margin:40px auto;
-  background:#E41F1A;
-  width:70px;
-  height:70px;
-  border-radius:50%;
-  box-shadow:0 0 10px 3px black;
+.fa-google {
+  font-size: 35px;
+  text-align: center;
+  background: #dd4b39;
+  color: white;
+  width: 70px;
+  height: 70px;
+  border-radius: 50%;
+  vertical-align: middle;
+  line-height: 69px;
 }
 
-.instagram {
+.fa-instagram {
   display: inline-block;
   width: 70px;
   height: 70px;
@@ -82,23 +79,30 @@ option {
   line-height: 65px;
   vertical-align: middle;
   background: #d6249f;
-  background: radial-gradient(circle at 30% 107%, #fdf497 0%, #fdf497 5%, #fd5949 45%,#d6249f 60%,#285AEB 90%);
-  box-shadow: 0px 3px 10px rgba(0,0,0,.25);
+  background: radial-gradient(
+    circle at 30% 107%,
+    #fdf497 0%,
+    #fdf497 5%,
+    #fd5949 45%,
+    #d6249f 60%,
+    #285aeb 90%
+  );
+  box-shadow: 0px 3px 10px rgba(0, 0, 0, 0.25);
 }
 
 .header {
-  background-color: #F1F1F1;
+  background-color: #f1f1f1;
   text-align: center;
   padding: 30px;
 }
 
 .footer {
-  background-color: #F1F1F1;
+  background-color: #f1f1f1;
   text-align: center;
   padding: 25px;
 }
 
-.boton {  
+.boton {
   text-decoration: none;
   margin-top: 20px;
   padding: 10px;
@@ -110,7 +114,7 @@ option {
   border: 2px solid #0016b0;
 }
 
-.boton:hover{
+.boton:hover {
   color: #1883ba;
   background-color: #ffffff;
 }
