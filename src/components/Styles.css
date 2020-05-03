@@ -1,12 +1,12 @@
 .titulo {
   font-size: 30px;
-  margin: 0px 0px 1px 0px;
+  margin: 20px 130px -10px 0px;
   display: block;
 }
 
 .div {
   text-align: center;
-  margin: 2% 25% 1% 25%;
+  margin: 2% 25% 2% 25%;
   min-height: 300px;
   min-width: 250px;
   border-style: ridge;
@@ -25,16 +25,15 @@ option {
 }
 
 .imageResponsive {
-  max-width: 100%;
-  border-radius: 50%;
-  border-style: ridge;
-  max-width: 960px;
-  width: 100%;
-  height: auto;
+    margin-top: 0px;
+    width:100px;
+    height:100px;
+    border-radius:100px;
+    border-style: ridge;
 }
 
 .yellow {
-  background-color: yellow;
+  background-color: #ffffe0;
   border: ridge;
 }
 
@@ -93,13 +92,13 @@ option {
 .header {
   background-color: #f1f1f1;
   text-align: center;
-  padding: 30px;
+  padding: 28px;
 }
 
 .footer {
   background-color: #f1f1f1;
   text-align: center;
-  padding: 25px;
+  padding: 24px;
 }
 
 .boton {

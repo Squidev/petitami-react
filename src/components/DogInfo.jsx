@@ -13,9 +13,9 @@ class DogInfo extends Component {
       dogImage: "",
       dogName: "Perro",
       dogDescription: "Descripcion",
-      ownerDirection: "Dirreccion",
+      ownerDirection: "Direccion",
       ownerName: "Nombre del Dueño",
-      contactMediums: [{ contactMediumName: "Tel", value: "2614785498" }],
+      contactMediums: [{ contactMediumName: "Tel", value: "2614785498"}]
     });
   }
 
@@ -41,7 +41,7 @@ class DogInfo extends Component {
               <br />
             </div>
             <br />
-            <label className="campos titulo"> {this.state.dogName}</label>
+            <label className="titulo"> {this.state.dogName}</label>
             <br />
             <br />
             <br />
@@ -52,7 +52,6 @@ class DogInfo extends Component {
           <hr></hr>
           <label className="campos">{this.state.ownerName}</label>
           <hr></hr>
-          <br></br>
           <label className="campos">{this.state.ownerDirection}</label>
           <hr></hr>
           <ul>
