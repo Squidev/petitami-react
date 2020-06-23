@@ -111,7 +111,7 @@ class DogForm extends Component {
                     <option value="Telefono">Telefono</option>
                   </select>
                   <label className="campos">Contacto:</label>{" "}
-                  <input id="contact" value={this.state.contactMediums.contactMediumValue} onBlur={() => this.saveContact(this.state.contactMediums.indexOf(c))}></input>{" "}
+                  <input id="contact" value={this.state.contactMediums.contactMediumValue} onBlur={(e) => this.saveContact(e.target.value,this.state.contactMediums.indexOf(c))}></input>{" "}
                 </li>
               ))}
               <br/>
@@ -138,7 +138,7 @@ class DogForm extends Component {
     this.setState({ contactMediums: contacts });
   }
 
-  saveContact = (contactMediumIndex) => {
+  saveContact = (contactMediumIndex,e) => {
     const contacts = [...this.state.contactMediums];
     contacts[contactMediumIndex].contactMediumValue = "???????";
     this.setState( {contactMediums: contacts });
