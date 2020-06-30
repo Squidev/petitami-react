@@ -1,16 +1,26 @@
-.titulo {
-  font-size: 30px;
-  margin: 0px 0px 1px 0px;
-  display: block;
+
+body{
+  flex: 1 0 auto;
+}
+.card-container {
+  display: flex;
+  align-content: center;
+  align-items: center;
+  justify-content: center;
+  justify-items: center;
 }
 
-.div {
+.card {
   text-align: center;
-  margin: 5% 25% 5% 25%;
+  margin: 30px 0 30px 0;
   min-height: 300px;
   min-width: 250px;
-  border-style: ridge;
-  padding: 10px 10px 10px 10px;
+  max-width: 600px;
+}
+
+#dog-name {
+  position: absolute;
+  top: 50%;
 }
 
 select:required:invalid {
@@ -24,78 +34,114 @@ option {
   color: black;
 }
 
-.imageResponsive{
-  max-width: 100%;
+.pet-image{
+  height: 80%;
+  width: 80%;
   border-radius: 50%;
-  border-style: ridge;
-  max-width: 960px; 
-  width:100%;
-  height:auto;
+  border: 1px solid rgba(0,0,0,0.9);
 }
 
-.yellow{
-  background-color: yellow;
-  border: ridge;
+.pet-image-container{
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 150px;
+  height: 150px;
+  margin: 20px;
 }
 
-.leftfloat{
-    float: left;
-    width: 120px;
-    padding: 20px;
+.pet-name-container{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 150px;
+  margin: 20px;
+  /*background-color: #61dafb;*/
 }
 
-.bottomleft {
+
+.card-header{
+  background-color: rgb(250,246,151);
   position: relative;
-  bottom: -20px;
-  left: -300px;
+  padding: 0;
+  margin: 0;
 }
 
-.fa-facebook {
-  opacity: 0.7;
+.card-body{
+  margin: 0;
+  padding: 0;
+}
+
+.card-division{
+  display:flex;
   padding: 20px;
-  font-size: 30px;
-  width: 30px;
-  text-align: center;
-  text-decoration: none;
-  margin: 5px 2px;
-  border-radius: 50%;
-  background: #3B5998;
-  color: white;
+  align-items: center;
+  align-content: center;
+  border-bottom: 1px solid;
 }
-.fa-gmail{
-  margin:40px auto;
-  background:#E41F1A;
-  width:70px;
-  height:70px;
-  border-radius:50%;
-  box-shadow:0 0 10px 3px black;
+.card-division img{
+  margin: 0 10px 0 -5px;
+  padding: 0;
 }
 
-.instagram {
+#pet-button-bar{
+  display: inline;
+}
+
+.pet-bar-button{
   display: inline-block;
-  width: 70px;
-  height: 70px;
-  text-align: center;
-  border-radius: 60px;
-  color: #fff;
-  font-size: 40px;
-  line-height: 65px;
-  vertical-align: middle;
-  background: #d6249f;
-  background: radial-gradient(circle at 30% 107%, #fdf497 0%, #fdf497 5%, #fd5949 45%,#d6249f 60%,#285AEB 90%);
-  box-shadow: 0px 3px 10px rgba(0,0,0,.25);
+  padding-top: 5px;
+  margin: 0;
+  width: 50%;
+  height: auto;
+  align-items: center;
+  align-content: center;
+  justify-items: center;
+  justify-content: center;
+
 }
 
-.header {
+p{
+  padding: 0;
+  margin: 0;
+}
+.contact-medium-logo-module{
+  display: flex;
+  align-items: center;
+  justify-content: space-evenly;
+  padding: 20px 0 20px 0;
+}
+
+.contact-medium-logo-container{
+  height: 70px;
+  width: 70px;
+}
+
+.contact-medium-logo:hover{
+  filter: brightness(50%);
+}
+
+a {
+  color: #282c34;
+}
+
+a:hover{
+  filter: brightness(80%);
+  color: #282c34;
+}
+
+.webpage-header {
   background-color: #F1F1F1;
   text-align: center;
   padding: 30px;
 }
 
 .footer {
+  display: block;
   background-color: #F1F1F1;
   text-align: center;
   padding: 25px;
+  flex-shrink: 0;
 }
 
 .boton {  
@@ -124,13 +170,13 @@ option {
   .responsive {
     width: 50%;
     margin: 0;
-    padding: 0%;
+    padding: 0;
   }
 }
 @media only screen and (max-width: 500px) {
   .responsive {
     width: 90%;
     margin: 0;
-    padding: 0%;
+    padding: 0;
   }
 }

@@ -1,0 +1,76 @@
+body{
+  flex: 1 0 auto;
+}
+
+.webpage-header {
+  background-color: #F1F1F1;
+  text-align: center;
+}
+
+.abm-body{
+  max-width: 1000px;
+  margin: 30px auto 30px auto;
+  align-content: center;
+  align-items: center;
+  justify-content: center;
+  justify-items: center;
+}
+
+.abm-header {
+  display: flex;
+  align-content: center;
+  align-items: center;
+  margin-bottom: 10px;
+}
+
+table{
+  border-collapse: collapse;
+  width: 100%;
+}
+
+th:nth-child(3) {
+  text-align: center;
+}
+
+th:nth-child(4) {
+  text-align: center;
+}
+
+td:nth-child(3){
+  text-align: center;
+}
+
+td:nth-child(4){
+  text-align: center;
+}
+
+#add-client-button {
+  margin-left: 10px;
+}
+
+button {
+  margin: 0 10px 0 10px;
+}
+
+.footer {
+  display: block;
+  background-color: #F1F1F1;
+  text-align: center;
+  padding: 25px;
+  flex-shrink: 0;
+}
+
+@media only screen and (max-width: 1200px) {
+  .responsive {
+    width: 50%;
+    margin: 0;
+    padding: 0;
+  }
+}
+@media only screen and (max-width: 500px) {
+  .responsive {
+    width: 90%;
+    margin: 0;
+    padding: 0;
+  }
+}
