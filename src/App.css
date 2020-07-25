@@ -3,30 +3,11 @@ html{
   min-height: 100%;
 }
 
-html,body{
-  height: 100%;
-  min-height: 100%;
-  margin:0;
-  padding:0 0 0 0;
+#webpage-body {
+  display: flex;
+  min-height: 100vh;
+  flex-direction: column;
   background-color: rgb(255, 252, 218);
-}
-
-#webpage-content{
-  height: calc(100% - 102px);
-  min-height: 100%;
-  box-sizing: content-box;
-}
-
-#root {
-  height: 100%;
-}
-@keyframes App-logo-spin {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
 }
 
 #webpage-header {
@@ -35,14 +16,18 @@ html,body{
   height: 50px;
 }
 
+#webpage-content{
+  display: flex;
+  flex: 1 0 auto;
+}
+
 #webpage-footer {
-  position: absolute;
-  bottom: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 50px;
   width: 100%;
   background-color: #282c34;
-  text-align: center;
-  padding-top: 15px;
-  padding-bottom: 15px;
   color: grey;
 }
 
@@ -53,6 +38,19 @@ html,body{
   text-decoration: none;
   transition: 0.4s ease-in-out;
 }
+
 #webpage-footer a:hover {
   opacity: 0.6;
 }
+
+@keyframes App-logo-spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+
+

@@ -11,7 +11,7 @@ function App() {
       <React.Fragment>
           <header id="webpage-header">
           </header>
-          <div id="webpage-content">
+          <main id="webpage-content">
               <Router>
                       {/*A <Switch> looks through all its children <Route>
                       elements and renders the first one whose path
@@ -45,7 +45,7 @@ function App() {
                           </Route>
                       </Switch>
               </Router>
-          </div>
+          </main>
           <footer id="webpage-footer">
                  <small>
                      &copy;2020 <a href="http://www.glama.com">Glama</a>

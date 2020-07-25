@@ -1,8 +1,6 @@
 #home-backdrop {
-    height: 100%;
-    position: relative;
     display: flex;
-    flex-direction: column;
+    flex: 1 1 auto;
     align-items: center;
     justify-content: center;
     background-color: rgb(250,246,151);

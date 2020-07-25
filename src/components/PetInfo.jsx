@@ -1,6 +1,7 @@
 import React, {Component, createRef} from "react";
 import "./Styles.css";
 import ModalCallLocate from "./modals/ModalCallLocate";
+import petAvatar from "./icons/pet-avatar.png";
 
 class PetInfo extends Component {
 
@@ -281,33 +282,35 @@ class PetInfo extends Component {
     render() {
         return (
             <React.Fragment>
-                <div className="card-container">
-                    <div className="card border-dark bg-light mb-3 responsive">
-                        <div className="card-header border-bottom border-dark">
-                            <div className="pet-image-container float-left">
-                                <img className="pet-image"
-                                     src={this.state.photo}
-                                     alt="Pet photo"/>
+                <div className="card-backdrop">
+                    <div className="card-container">
+                        <div className="card border-dark bg-light responsive">
+                            <div className="card-header border-bottom border-dark">
+                                <div className="pet-image-container float-left">
+                                    <img className="pet-image"
+                                         src={this.state.photo === "" ? petAvatar : this.state.photo}
+                                         alt="Pet photo"/>
+                                </div>
+                                <div className="pet-name-container d-flex align-content-center justify-content-center">
+                                    <h5>
+                                        {this.state.name}
+                                    </h5>
+                                </div>
+                                <div id="pet-button-bar">
+                                    {this.renderCallButton()}
+                                    {this.renderLocationButton()}
+                                </div>
                             </div>
-                            <div className="pet-name-container d-flex align-content-center justify-content-center">
-                                <h5>
-                                    {this.state.name}
-                                </h5>
-                            </div>
-                            <div id="pet-button-bar">
-                                {this.renderCallButton()}
-                                {this.renderLocationButton()}
-                            </div>
-                        </div>
-                        <div className="card-body">
-                            {this.renderDescriptionSection()}
-                            {this.renderPhoneSection()}
-                            {this.renderAddressSection()}
-                            {this.renderSocialMediaSection()}
-                            <div className="card-footer">
-                                <img src={require("./logos/petitami-logo.png")}
-                                     alt="Petit Ami logo"
-                                />
+                            <div className="card-body">
+                                {this.renderDescriptionSection()}
+                                {this.renderPhoneSection()}
+                                {this.renderAddressSection()}
+                                {this.renderSocialMediaSection()}
+                                <div className="card-footer">
+                                    <img src={require("./logos/petitami-logo.png")}
+                                         alt="Petit Ami logo"
+                                    />
+                                </div>
                             </div>
                         </div>
                     </div>
