@@ -1,5 +1,7 @@
 import React, {Component} from "react";
 import {Link} from "react-router-dom";
+import "./Home.css"
+import petitAmiLogo from "./logos/petitami-logo.png"
 
 class Home extends Component {
     constructor(props) {
@@ -8,19 +10,9 @@ class Home extends Component {
 
     render() {
         return(
-            <React.Fragment>
-                <h1>Home page</h1>
-                <nav>
-                    <ul>
-                        <li>
-                            <Link to="/pet/uuid">Pet information</Link>
-                        </li>
-                        <li>
-                            <Link to="/abm/client/">Client ABM</Link>
-                        </li>
-                    </ul>
-                </nav>
-            </React.Fragment>
+            <div id="home-backdrop" className="">
+                <img src={petitAmiLogo} alt=""/>
+            </div>
         );
     }
 }

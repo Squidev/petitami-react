@@ -8,7 +8,8 @@ class ModalContactMedium extends Component {
             activeContactMedium: {
                 id: 0,
                 type: "",
-                value: ""
+                value: "",
+                ownerId: parseInt(this.props.ownerId)
             },
             showModal:false,
         };
@@ -35,6 +36,7 @@ class ModalContactMedium extends Component {
                     id: 0,
                     type: "",
                     value: "",
+                    ownerId: parseInt(this.props.ownerId)
                 },
                 showModal: true
             }
@@ -42,35 +44,73 @@ class ModalContactMedium extends Component {
         this.setState(openState, ()=> console.log("Show ModalContactMedium: " + this.state.showModal));
     }
 
-    _handleClose = (event) => {
+    _handleClose = () => {
         let cleanState = {
             activeContactMedium:{
                 id: 0,
                 type: "",
                 value: "",
+                ownerId: 0
             },
             showModal:false
         };
         this.setState(cleanState, ()=> console.log("Show ModalPet: " + this.state.showModal));
     }
 
-    _handleSave = (event) => {
+    _handleSave = () => {
+        console.log("activeContactMedium:", this.state.activeContactMedium);
         if (this.state.activeContactMedium.id === 0) {
             /*----------------AJAX call-----------------*/
-            alert("AJAX outgoing, boiiii");
-            let mockResponseContactMedium = {...this.state.activeContactMedium, id: 24};
-            console.log(mockResponseContactMedium);
+            fetch("http://localhost:8080/api/v1/contactmedium/", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify(this.state.activeContactMedium)
+            })
+                .then(result => {
+                    if (result.ok) {
+                        result.json().then(responseContactMedium => {
+                            console.log("Success:", responseContactMedium);
+                            this.props.appendContactMediumToList(responseContactMedium);
+                        });
+                    } else {
+                        result.json().then(apiError => {
+                            console.log("Error:", apiError);
+                        })
+                    }
+                })
+                .catch(error => {
+                    console.error("Error:", error);
+                });
+            //alert("AJAX outgoing, boiiii");
             /*------------------------------------------*/
-
-            this.props.appendContactMediumToList(mockResponseContactMedium);
         } else {
             /*----------------AJAX call-----------------*/
-            alert("AJAX outgoing, boiiii");
-            let mockResponseContactMedium = {...this.state.activeContactMedium};
-            console.log(mockResponseContactMedium);
+            fetch("http://localhost:8080/api/v1/contactmedium/" + this.state.activeContactMedium.id, {
+                method: "PUT",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify(this.state.activeContactMedium)
+            })
+                .then(result => {
+                    if (result.ok) {
+                        result.json().then(responseContactMedium => {
+                            console.log("Success:", responseContactMedium);
+                            this.props.modifyContactMediumFromList(responseContactMedium);
+                        });
+                    } else {
+                        result.json().then(apiError => {
+                            console.log("Error:", apiError);
+                        })
+                    }
+                })
+                .catch(error => {
+                    console.error("Error:", error);
+                });
+            //alert("AJAX outgoing, boiiii");
             /*------------------------------------------*/
-
-            this.props.modifyContactMediumFromList(mockResponseContactMedium);
         }
         this._handleClose();
     }
@@ -80,7 +120,8 @@ class ModalContactMedium extends Component {
             activeContactMedium:{
                 id: this.state.activeContactMedium.id,
                 type: event.target.value,
-                value: this.state.activeContactMedium.value
+                value: this.state.activeContactMedium.value,
+                ownerId: this.state.activeContactMedium.ownerId
             }
         });
         console.log(event.target.value);
@@ -91,7 +132,8 @@ class ModalContactMedium extends Component {
             activeContactMedium:{
                 id: this.state.activeContactMedium.id,
                 type: this.state.activeContactMedium.type,
-                value: event.target.value
+                value: event.target.value,
+                ownerId: this.state.activeContactMedium.ownerId
             }
         });
         console.log(event.target.value);
@@ -131,7 +173,8 @@ class ModalContactMedium extends Component {
                             <form>
                                 <div className="form-group">
                                     <label htmlFor="contact-medium-id-number"
-                                           className="col-form-label">
+                                           className="col-form-label"
+                                           hidden={true}>
                                         ID:
                                     </label>
                                     <input readOnly={true}
@@ -139,6 +182,7 @@ class ModalContactMedium extends Component {
                                            className="form-control"
                                            id="contact-medium-id"
                                            value={this.state.activeContactMedium.id}
+                                           hidden={true}
                                     />
                                 </div>
                                 <div className="form-group">
@@ -180,7 +224,7 @@ class ModalContactMedium extends Component {
                                 Cancelar
                             </button>
                             <button type="button"
-                                    className="btn btn-primary"
+                                    className="btn btn-success"
                                     onClick={this._handleSave}>
                                 Guardar
                             </button>

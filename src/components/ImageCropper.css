@@ -1,0 +1,36 @@
+.img-container {
+    width: 100%;
+}
+
+/* Ensure the size of the image fit the container perfectly */
+.img-container img {
+    display: block;
+    /* This rule is very important, please don't ignore this */
+    max-width: 100%;
+}
+
+.img-preview {
+    width: 200px;
+    height: 200px;
+    float: left;
+    margin-left: 10px;
+}
+
+.backdrop {
+    background-color: rgba(50,50,50,0.5);
+    position: absolute;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+}
+
+#canvas-modalr {
+    position: relative;
+    top: -22%;
+    border: ridge 5px dimgray;
+
+}

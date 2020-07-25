@@ -46,7 +46,7 @@ class ModalOwner extends Component {
         //AHHHHHH, EL console.log() PELADO NO, PERO ADENTRO DE LA LAMBDA SI, PUTITAH. TODO EL DÍA TRYHARDEANDO EL SETSTATE, NI ELLA ME PUSO TAN DE LA NUCA.
     }
 
-    _handleClose = (event) => {
+    _handleClose = () => {
         let cleanState = {
             activeOwner: {
                 id: 0,
@@ -89,8 +89,62 @@ class ModalOwner extends Component {
         console.log(event.target.value);
     }
 
-    _handleSave = (event) => {
-        alert("AJAX outgoing, boiiii");
+    _handleSubmit = () => {
+        if (this.state.activeOwner.id === 0) {
+            /*---------------AJAX POST call--------------*/
+            fetch("http://localhost:8080/api/v1/owner/", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                body: JSON.stringify(this.state.activeOwner),
+            })
+                .then(response => {
+                    if (response.ok) {
+                        // json() devuelve una promesa que será resuelta una vez que la response sea parseada a json
+                        response.json().then(newOwner => {
+                            console.log("Success:", newOwner);
+                            this.props.handleNewOwner(newOwner)
+                        });
+                    } else {
+                        response.json().then(apiError => {
+                            console.log(apiError.message);
+                        })
+                    }
+                })
+                .catch((error) => {
+                    console.error("Error:", error);
+                });
+            //alert("AJAX outgoing, boiiii");
+            /*-------------------------------------------*/
+        } else {
+            /*---------------AJAX PUT call---------------*/
+            fetch("http://localhost:8080/api/v1/owner/" + this.state.activeOwner.id, {
+                method: "PUT",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                body: JSON.stringify(this.state.activeOwner),
+            })
+                .then(response => {
+                    if (response.ok) {
+                        // json() devuelve una promesa que será resuelta una vez que la response sea parseada a json
+                        response.json().then(editedOwner => {
+                            console.log("Success:", editedOwner);
+                            this.props.handleEditedOwner(editedOwner)
+                        });
+                    } else {
+                        response.json().then(apiError => {
+                            console.log(apiError.message);
+                        })
+                    }
+                })
+                .catch((error) => {
+                    console.error("Error:", error);
+                });
+            //alert("AJAX outgoing, boiiii");
+            /*-------------------------------------------*/
+        }
         this._handleClose();
     }
 
@@ -126,10 +180,12 @@ class ModalOwner extends Component {
                             </button>
                         </div>
                         <div className="modal-body">
-                            <form>
+                            <form onSubmit={(e) => e.preventDefault()}>
                                 <div className="form-group">
                                     <label htmlFor="owner-id-number"
-                                           className="col-form-label">
+                                           className="col-form-label"
+                                           hidden={true}
+                                    >
                                         ID:
                                     </label>
                                     {/*Tenemos 2 opciones para mostrar las propiedades actuales del owner, ya sea que estemos creando uno nuevo o modificando uno
@@ -154,6 +210,7 @@ class ModalOwner extends Component {
                                            className="form-control"
                                            id="owner-id"
                                            value={this.state.activeOwner.id}
+                                           hidden={true}
                                     />
                                 </div>
                                 <div className="form-group">
@@ -189,8 +246,8 @@ class ModalOwner extends Component {
                                 Cancelar
                             </button>
                             <button type="button"
-                                    className="btn btn-primary"
-                                    onClick={this._handleSave}>
+                                    className="btn btn-success"
+                                    onClick={this._handleSubmit}>
                                 Guardar
                             </button>
                         </div>

@@ -1,23 +1,30 @@
-import React, { Component } from "react";
+import React, {Component, createRef} from "react";
 import "./Styles.css";
+import ModalCallLocate from "./modals/ModalCallLocate";
 
 class PetInfo extends Component {
-    state = {
-        dogUuid: "",
-        dogName: "",
-        dogPhoto: null,
-        dogDescription: "",
-        ownerName: "",
-        contactMediums: []
-    };
+
+    constructor(props) {
+        super(props);
+        this.state = {
+            name: "",
+            photo: "",
+            description: "",
+            ownerId: 0,
+            contactMediums: []
+        };
+        this.modalCallLocate = createRef();
+    }
+
 
     componentDidMount() {
+        this.fetchPet();
+
+        /*MockupState
         this.setState({
-            dogUuid: "",
-            dogName: "Chocoperro",
-            dogPhoto: null,
-            dogDescription: "Descripcion",
-            ownerName: "Chocoperro Owner",
+            name: "Chocoperro",
+            photo: null,
+            description: "Descripción",
             contactMediums: [
                 {type: "Teléfono", value: "2614785498"},
                 {type: "Dirección", value: "San Martín 234, Godoy Cruz, Mendoza, Argentina" },
@@ -27,7 +34,7 @@ class PetInfo extends Component {
                 {type: "Email", value: "chocoperro.owner@gmail.com" },
                 {type: "Teléfono", value: "2614487956" }
             ]
-        });
+        });*/
     }
 
 /* DAFAK THIS DOESN'T WORK MAN
@@ -36,24 +43,85 @@ class PetInfo extends Component {
         return cm.type;
     }*/
 
+    fetchPet = () => {
+        fetch("http://localhost:8080/api/v1/pet/uuid/" + this.props.match.params.uuid, {
+            method: "GET",
+            headers: {
+                "Content-Type": "application/json"
+            }
+        })
+            .then(response => {
+                if (response.ok) {
+                    response.json()
+                        .then(responsePet => {
+                        console.log("Success:", responsePet);
+                        this.setState({
+                            name: responsePet.name,
+                            photo: responsePet.photo,
+                            description: responsePet.description,
+                            ownerId: responsePet.ownerId
+                        });
+                        this.fetchContactMediums(responsePet.ownerId);
+                    })
+                } else {
+                    response.json().then(apiError => {
+                        console.log("Error:", apiError);
+                    });
+                }
+            })
+            .catch(error => {
+                console.error("Error:", error);
+            });
+    }
+
+    fetchContactMediums = (ownerId) => {
+        fetch("http://localhost:8080/api/v1/contactmedium/owner/" + ownerId, {
+            method: "GET",
+            headers: {
+                "Content-Type": "application/json"
+            }
+        })
+            .then(response => {
+                if (response.ok) {
+                    response.json().then(responseContactMediums => {
+                        console.log("Success:", responseContactMediums);
+                        this.setState({
+                            contactMediums: responseContactMediums
+                        });
+                    });
+                } else {
+                    response.json().then(apiError => {
+                        console.log("Error:", apiError);
+                    });
+                }
+            })
+            .catch(error => {
+                console.error("Error:", error);
+            });
+    }
+
+    openModalCallLocate = (contactMediums) => {
+        if (this.modalCallLocate) this.modalCallLocate.current.openModal(contactMediums);
+    }
+
     renderCallButton = () => {
-        let cm = this.state.contactMediums.filter(contactMedium => {return contactMedium.type==="Teléfono";});
-        if (cm.length>0){
+        let phones = this.state.contactMediums.filter(contactMedium => {return contactMedium.type==="Teléfono";});
+        if (phones.length>0){
             return (
-                <a href={'tel:' + cm[0].value}>
-                    <div style={{backgroundColor:"rgb(250,246,151)"}}
-                         className="pet-bar-button border-top border-dark border-right">
-                        <img height="30px"
-                             width="auto"
-                             className=""
-                             src={require("./icons/phone-icon.png")}
-                             alt="Phone icon"
-                        />
-                        <p>
-                            Llamar
-                        </p>
-                    </div>
-                </a>)
+                <div style={{backgroundColor:"rgb(250,246,151)"}}
+                     className="pet-bar-button border-top border-dark border-right"
+                     onClick={() => this.openModalCallLocate(phones)}>
+                    <img height="30px"
+                         width="auto"
+                         className=""
+                         src={require("./icons/phone-icon.png")}
+                         alt="Phone icon"
+                    />
+                    <p>
+                        Llamar
+                    </p>
+                </div>
+            )
         } else {
             return (
                 <div style={{backgroundColor:"lightgray"}}
@@ -72,23 +140,23 @@ class PetInfo extends Component {
     }
 
     renderLocationButton = () => {
-        let cm = this.state.contactMediums.filter(contactMedium => {return contactMedium.type==="Dirección";});
-        if (cm.length>0){
+        let locations = this.state.contactMediums.filter(contactMedium => {return contactMedium.type==="Dirección";});
+        if (locations.length>0){
             return (
-                <a href={'https://maps.google.com/maps?q=' + cm[0].value}>
-                    <div style={{backgroundColor:"rgb(250,246,151)"}}
-                         className="pet-bar-button border-top border-dark">
-                        <img height="30px"
-                             width="auto"
-                             className="pet-bar-button-icon"
-                             src={require("./icons/location-icon.png")}
-                             alt="Location icon"
-                        />
-                        <p>
-                            Localizar
-                        </p>
-                    </div>
-                </a>);
+                <div style={{backgroundColor:"rgb(250,246,151)"}}
+                     className="pet-bar-button border-top border-dark"
+                     onClick={() => this.openModalCallLocate(locations)}>
+                    <img height="30px"
+                         width="auto"
+                         className="pet-bar-button-icon"
+                         src={require("./icons/location-icon.png")}
+                         alt="Location icon"
+                    />
+                    <p>
+                        Localizar
+                    </p>
+                </div>
+            );
         } else {
         return (
             <div style={{backgroundColor:"lightgray"}}
@@ -105,6 +173,111 @@ class PetInfo extends Component {
         }
     }
 
+    renderDescriptionSection = () => {
+        if (this.state.description.length === 0) {
+            return null;
+        } else {
+            return (
+                <div className="card-division">
+                    <p>
+                        {this.state.description}
+                    </p>
+                </div>
+            );
+        }
+    }
+
+    renderPhoneSection = () => {
+        let phones = this.state.contactMediums.filter(cm => cm.type === "Teléfono");
+        if (phones.length === 0) {
+            return null;
+        } else {
+            return (
+                <div className="card-division">
+                    <img height="50px"
+                         className=""
+                         src={require("./icons/phone-icon.png")}
+                         alt="Phone icon"
+                    />
+                    <div className="text-left">
+                        {phones.map(cm => {return (
+                            <p className="">
+                                {cm.value}
+                            </p>
+                        );})}
+                    </div>
+                </div>
+            );
+        }
+    }
+
+    renderAddressSection = () => {
+        let addresses = this.state.contactMediums.filter(cm => {return cm.type === "Dirección";});
+        if (addresses.length === 0) {
+            return null;
+        } else {
+            return (
+                <div className="card-division">
+                    <img height="50px"
+                         className=""
+                         src={require("./icons/location-icon.png")}
+                         alt="Location icon"
+                    />
+                    <div className="text-left">
+                        {addresses.map(cm => {return (
+                            <p className="">
+                                {cm.value}
+                            </p>
+                        );})}
+                    </div>
+                </div>
+            );
+        }
+    }
+
+    renderSocialMediaSection = () => {
+        let socialMedia = this.state.contactMediums.filter(cm => {
+            return cm.type !== "Dirección" && cm.type !== "Teléfono";
+        });
+        if (socialMedia.length === 0) {
+            return null;
+        } else {
+            return (
+                <div className="card-division contact-medium-logo-module">
+                    {socialMedia.filter(cm => {
+                        return cm.type === "Facebook" || cm.type === "Instagram" || cm.type === "Twitter";
+                    })
+                        .map(cm => {
+                            return (
+                                <div className="contact-medium-logo-container">
+                                    <a href={"http://" + cm.value}>
+                                        <img src={require("./logos/"+cm.type.toLowerCase()+"-logo.png")}
+                                             alt={cm.type + " logo"}
+                                             className="contact-medium-logo w-100 h-100"/>
+                                    </a>
+                                </div>
+                        );})
+                    }
+                    {socialMedia.filter(cm => {
+                        return cm.type === "Email";
+                    })
+                        .map(cm => {
+                            return (
+                                <div className="contact-medium-logo-container">
+                                    <a href={"mailto:" + cm.value}>
+                                        <img src={require("./logos/"+cm.type.toLowerCase()+"-logo.png")}
+                                             alt={cm.type + " logo"}
+                                             className="contact-medium-logo w-100 h-100"
+                                        />
+                                    </a>
+                                </div>
+                        );})
+                    }
+                </div>
+            );
+        }
+    }
+
     render() {
         return (
             <React.Fragment>
@@ -113,12 +286,12 @@ class PetInfo extends Component {
                         <div className="card-header border-bottom border-dark">
                             <div className="pet-image-container float-left">
                                 <img className="pet-image"
-                                     src={require("./perro.jpg")}
-                                     alt={"Perro"}/>
+                                     src={this.state.photo}
+                                     alt="Pet photo"/>
                             </div>
                             <div className="pet-name-container d-flex align-content-center justify-content-center">
                                 <h5>
-                                    {this.state.dogName}
+                                    {this.state.name}
                                 </h5>
                             </div>
                             <div id="pet-button-bar">
@@ -127,58 +300,10 @@ class PetInfo extends Component {
                             </div>
                         </div>
                         <div className="card-body">
-                            <div className="card-division">
-                                <p>
-                                    {this.state.dogDescription}
-                                </p>
-                            </div>
-                            <div className="card-division">
-                                <img height="50px"
-                                     className=""
-                                     src={require("./icons/phone-icon.png")}
-                                     alt="Phone icon"
-                                />
-                                <div className="">
-                                    {this.state.contactMediums.filter(cm => {return cm.type === "Teléfono";})
-                                                              .map(cm => {return (<p className="">{cm.value}</p>);})}
-                                </div>
-                            </div>
-                                {this.state.contactMediums.filter(cm => {return cm.type === "Dirección";})
-                                                          .map(cm => {return (
-                                                              <div className="card-division">
-                                                                  <img height="50px"
-                                                                       className=""
-                                                                       src={require("./icons/location-icon.png")}
-                                                                       alt="Location icon"
-                                                                  />
-                                                                  <p className="">
-                                                                      {cm.value}
-                                                                  </p>
-                                                              </div>
-                                                          );})}
-                            <div className="card-division contact-medium-logo-module">
-                                {this.state.contactMediums.filter(cm => {return cm.type === "Facebook" || cm.type === "Instagram" || cm.type === "Twitter";})
-                                                          .map(cm => {return (
-                                                              <div className="contact-medium-logo-container">
-                                                                  <a href={"http://" + cm.value}>
-                                                                  <img src={require("./logos/"+cm.type.toLowerCase()+"-logo.png")}
-                                                                       alt={cm.type + " logo"}
-                                                                       className="contact-medium-logo w-100 h-100"/>
-                                                                  </a>
-                                                              </div>
-                                                          );})}
-                                {this.state.contactMediums.filter(cm => {return cm.type === "Email";})
-                                                          .map(cm => {return (
-                                                              <div className="contact-medium-logo-container">
-                                                                  <a href={"mailto:" + cm.value}>
-                                                                      <img src={require("./logos/"+cm.type.toLowerCase()+"-logo.png")}
-                                                                           alt={cm.type + " logo"}
-                                                                           className="contact-medium-logo w-100 h-100"
-                                                                      />
-                                                                  </a>
-                                                               </div>
-                                                          );})}
-                            </div>
+                            {this.renderDescriptionSection()}
+                            {this.renderPhoneSection()}
+                            {this.renderAddressSection()}
+                            {this.renderSocialMediaSection()}
                             <div className="card-footer">
                                 <img src={require("./logos/petitami-logo.png")}
                                      alt="Petit Ami logo"
@@ -187,9 +312,8 @@ class PetInfo extends Component {
                         </div>
                     </div>
                 </div>
-                <footer className="footer">
-                    Footer
-                </footer>
+
+                <ModalCallLocate ref={this.modalCallLocate} />
             </React.Fragment>
         );
     }

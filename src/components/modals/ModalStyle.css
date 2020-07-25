@@ -7,3 +7,9 @@
     background-color: rgba(0,0,0,0.3);
     padding: 50px;
 }
+
+#pet-photo {
+    padding: 2px;
+    border: solid 4px lightgray;
+    border-radius: 50%;
+}

@@ -6,6 +6,7 @@ import ModalContactMedium from "./modals/ModalContactMedium";
 import ModalEliminar from "./modals/ModalEliminar";
 import PropTypes from "prop-types";
 import {withRouter} from "react-router";
+import {Link} from "react-router-dom";
 
 class ClientDetails extends Component{
 
@@ -21,13 +22,15 @@ class ClientDetails extends Component{
                 id: 0,
                 uuid: "",
                 name: "",
-                photo: null,
-                description: ""
+                photo: "",
+                description: "",
+                ownerId: 0
             }],
             contactMediums:[{
                 id:0,
                 type:"",
                 value:"",
+                ownerId: 0
             }],
         }
         this.modalOwner = createRef();
@@ -38,71 +41,88 @@ class ClientDetails extends Component{
 
     componentDidMount() {
         //AJAX CALL
-        let ownerIdToInt = parseInt(this.props.match.params.id);
-        if (ownerIdToInt===1) {
-            let mockState = {
-                owner: {
-                    id: 1,
-                    dni: 15487544,
-                    name: "Chocoperro Owner",
-                },
-                pets: [{
-                    id: 1,
-                    uuid: "d4wad5-d45w-4w8dw6ad-w4d64-84wdw84",
-                    name: "Chocoperro",
-                    photo: null,
-                    description: "Good boy"
-                },{
-                    id: 2,
-                    uuid: "f8e6s4-fes654-65415f5-a3d51w-awd5",
-                    name: "Biggie",
-                    photo: null,
-                    description: "Bad boy"
-                }],
-                contactMediums: [{
-                    id: 1,
-                    type: "Facebook",
-                    value: "www.facebook.com/ChocoperroOwner"
-                },{
-                    id: 2,
-                    type: "Instagram",
-                    value: "www.instagram.com/ChocoperroOwner"
-                }]
-            };
-            this.setState(mockState,() => console.log(this.state.owner.id));
-        }
-        if(ownerIdToInt===2) {
-            let mockState = {
-                owner: {
-                    id: 2,
-                    dni: 49781254,
-                    name: "Fluffy Owner",
-                },
-                pets: [{
-                    id: 3,
-                    uuid: "ef46f-8v1e6-684es68-se6f4-6rd5g",
-                    name: "Fluffy",
-                    photo: null,
-                    description: "Hairy boy"
-                },{
-                    id: 4,
-                    uuid: "ef654-1drg-se6f8-se6fg8-wawdwa12",
-                    name: "Squishy",
-                    photo: null,
-                    description: "Rubenesque boy"
-                }],
-                contactMediums: [{
-                    id: 3,
-                    type: "Facebook",
-                    value: "www.facebook.com/FluffyOwner"
-                },{
-                    id: 4,
-                    type: "Instagram",
-                    value: "www.instagram.com/FluffyOwner"
-                }]
+        let ownerId = parseInt(this.props.match.params.id);
+        this.fetchOwner(ownerId);
+    }
+
+    fetchOwner = ownerId => {
+        fetch("http://localhost:8080/api/v1/owner/" + ownerId, {
+            method: "GET",
+            headers: {
+                "Content-Type": "application/json"
             }
-            this.setState(mockState,() => console.log(this.state.owner.id));
-        }
+        })
+            .then(response => {
+                if (response.ok) {
+                    response.json().then(responseOwner => {
+                        console.log("Success:", responseOwner)
+                        this.setState({
+                            owner: responseOwner
+                        });
+                        this.fetchPets(ownerId);
+                        this.fetchContactMediums(ownerId);
+                    })
+                } else {
+                    response.json().then(apiError => {
+                        console.log("Error:", apiError)
+                    })
+                }
+            })
+            .catch(error => {
+                console.error("Error:", error)
+            })
+    }
+
+    fetchPets = ownerId => {
+        fetch("http://localhost:8080/api/v1/pet/owner/" + ownerId, {
+            method: "GET",
+            headers: {
+                "Content-Type": "application/json"
+            }
+        })
+            .then(response => {
+                if (response.ok) {
+                    response.json().then(responsePets => {
+                        console.log("Success:", responsePets);
+                        this.setState({
+                            pets: responsePets
+                        });
+                    });
+                } else {
+                    response.json().then(apiError => {
+                        console.log("Error:", apiError);
+                    })
+                }
+            })
+            .catch(error => {
+                console.error("Error:", error);
+            })
+    }
+
+    fetchContactMediums = ownerId => {
+        fetch("http://localhost:8080/api/v1/contactmedium/owner/" + ownerId, {
+            method: "GET",
+            headers: {
+                "Content-Type": "application/json"
+            }
+        })
+            .then(response => {
+                if (response.ok) {
+                    response.json().then(responseContactMediums => {
+                        console.log("Success:", responseContactMediums);
+                        this.setState({
+                            contactMediums: responseContactMediums
+                        });
+                    });
+                } else {
+                    response.json().then(apiError => {
+                        console.log("Error:", apiError);
+                    })
+                }
+            })
+            .catch(error => {
+                console.error("Error:", error);
+            })
     }
 
     /*In Javascript, when a function is called, its called in the scope where it was called from, not where it was written (I know, seems counter intuitive). To
@@ -204,21 +224,6 @@ class ClientDetails extends Component{
         this.setState({pets: updatedPets});
     }
 
-    removeEntityFromList = (entityIdToDelete, entityType) => {
-        switch (entityType) {
-            case "Pet": {
-                let updatedPets = this.state.pets.filter(pet => pet.id !== entityIdToDelete);
-                this.setState({pets: updatedPets});
-                break;
-            }
-            case "ContactMedium": {
-                let updatedContactMediums = this.state.contactMediums.filter(contactMedium => contactMedium.id !== entityIdToDelete);
-                this.setState({contactMediums: updatedContactMediums});
-                break;
-            }
-        }
-    }
-
     appendContactMediumToList = (contactMedium) => {
         let contactMediums = [...this.state.contactMediums, contactMedium];
         this.setState({contactMediums: contactMediums});
@@ -230,7 +235,37 @@ class ClientDetails extends Component{
         this.setState({contactMediums: updatedContactMediums});
     }
 
+    removeEntityFromList = (entityIdToDelete, entityType) => {
+        switch (entityType) {
+            case "Pet": {
+                let updatedPets = this.state.pets.filter(pet => pet.id !== entityIdToDelete);
+                console.log("Updated pets:", updatedPets);
+                this.setState({
+                    pets: updatedPets
+                });
+                break;
+            }
+            case "ContactMedium": {
+                console.log("entityIdToDelete:", entityIdToDelete);
+                console.log("contactMediums:", this.state.contactMediums);
+                let updatedContactMediums = this.state.contactMediums.filter(contactMedium => contactMedium.id !== entityIdToDelete);
+                console.log("Updated contactMediums:", updatedContactMediums);
+                this.setState({
+                    contactMediums: updatedContactMediums
+                });
+                break;
+            }
+        }
+    }
+
+    handleEditedOwner = (editedOwner) => {
+        this.setState({owner: editedOwner}, () => console.log(this.state.owner));
+    }
+
     render() {
+        if (this.state.owner.id ===0) {
+            return <h2 id="error-message">El ID especificado no corresponde a ningún cliente.</h2>
+        }
         return (
             <React.Fragment>
                 <div className="abm-body">
@@ -254,11 +289,11 @@ class ClientDetails extends Component{
                         </div>
                         <div className="abm-body">
                             <label htmlFor="">
-                                Nombre: {this.state.owner.name}
+                                DNI: {this.state.owner.dni}
                             </label>
                             <br/>
                             <label htmlFor="">
-                                DNI: {this.state.owner.dni}
+                                Nombre: {this.state.owner.name}
                             </label>
                         </div>
                     </div>
@@ -270,7 +305,7 @@ class ClientDetails extends Component{
                             </h4>
                             <button id="add-pet-button"
                                     type="button"
-                                    className="btn btn-success"
+                                    className="btn btn-primary"
                                     onClick={() => this._openModalPet(null)}>
                                 Agregar
                             </button>
@@ -287,9 +322,6 @@ class ClientDetails extends Component{
                                             Nombre
                                         </th>
                                         <th>
-                                            Descripción
-                                        </th>
-                                        <th>
                                             UUID
                                         </th>
                                         <th>
@@ -298,9 +330,9 @@ class ClientDetails extends Component{
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    {this.state.pets.map(pet => {
+                                    {this.state.pets.map((pet, index) => {
                                         return (
-                                            <tr key={pet.id}>
+                                            <tr key={index}>
                                                 <td hidden="hidden">
                                                     {pet.id}
                                                 </td>
@@ -308,12 +340,15 @@ class ClientDetails extends Component{
                                                     {pet.name}
                                                 </td>
                                                 <td>
-                                                    {pet.description}
-                                                </td>
-                                                <td>
                                                     {pet.uuid}
                                                 </td>
                                                 <td>
+                                                    <Link to={"/pet/" + pet.uuid}>
+                                                        <button type="button"
+                                                                className="btn btn-primary link-button">
+                                                            Ver perfil
+                                                        </button>
+                                                    </Link>
                                                     <button type="button"
                                                             className="btn btn-warning"
                                                             onClick={() => this._openModalPet(pet)}>
@@ -340,7 +375,7 @@ class ClientDetails extends Component{
                             </h4>
                             <button id="add-contact-medium-button"
                                     type="button"
-                                    className="btn btn-success"
+                                    className="btn btn-primary"
                                     onClick={() => this._openModalContactMedium(null)}>
                                 Agregar
                             </button>
@@ -365,9 +400,9 @@ class ClientDetails extends Component{
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    {this.state.contactMediums.map(contactMedium => {
+                                    {this.state.contactMediums.map((contactMedium, index) => {
                                         return (
-                                            <tr>
+                                            <tr key={index}>
                                                 <td hidden="hidden">
                                                     {contactMedium.id}
                                                 </td>
@@ -398,31 +433,34 @@ class ClientDetails extends Component{
                     </div>
                 </div>
 
-                <ModalOwner ref={this.modalOwner} />
-                <ModalPet ref={this.setModalPetRef} appendPetToList={this.appendPetToList} modifyPetFromList={this.modifyPetFromList}/>
-                <ModalContactMedium ref={this.setModalContactMediumRef} appendContactMediumToList={this.appendContactMediumToList} modifyContactMediumFromList={this.modifyContactMediumFromList}/>
+                <ModalOwner ref={this.modalOwner} handleEditedOwner={this.handleEditedOwner}/>
+                <ModalPet ref={this.setModalPetRef} ownerId={this.state.owner.id} appendPetToList={this.appendPetToList} modifyPetFromList={this.modifyPetFromList}/>
+                <ModalContactMedium ref={this.setModalContactMediumRef} ownerId= {this.state.owner.id} appendContactMediumToList={this.appendContactMediumToList} modifyContactMediumFromList={this.modifyContactMediumFromList}/>
                 <ModalEliminar ref={this.modalEliminar} removeEntityFromList={this.removeEntityFromList} />
             </React.Fragment>
         );
     }
 }
 
-/*//If the component that calls Modal does not pass handleClose, the Modal won't close as the show state doesn't have any effect. To fix this, warn the component to
-// pass the handleClose.
+// If the component that calls Modal does not pass handleEditedOwner, the Modal won't have any effect outside itself. To fix this, warn the component to pass the
+// handleEditedOwner.
 ModalOwner.propTypes = {
-    handleClose: PropTypes.func.isRequired,
-    showModal: PropTypes.bool.isRequired
+    handleEditedOwner: PropTypes.func.isRequired,
 };
 
 ModalPet.propTypes = {
-    handleClose: PropTypes.func.isRequired,
-    showModal: PropTypes.bool.isRequired
+    appendPetToList: PropTypes.func.isRequired,
+    modifyPetFromList: PropTypes.func.isRequired
 };
 
 ModalContactMedium.propTypes = {
-    handleClose: PropTypes.func.isRequired,
-    showModal: PropTypes.bool.isRequired
-};*/
+    appendContactMediumToList: PropTypes.func.isRequired,
+    modifyContactMediumFromList: PropTypes.func.isRequired
+};
+
+ModalEliminar.propTypes = {
+    removeEntityFromList: PropTypes.func.isRequired
+}
 
 //withRouter para poder utilizar this.props.match.params para obtener el id desde la URL
 export default withRouter(ClientDetails);

@@ -21,12 +21,11 @@ class ModalEliminar extends Component {
                 showModal: true
             }
             this.setState(openState);
-            console.log("openState: ");
-            console.log(openState);
+            console.log("openState:", openState);
         }
     }
 
-    _handleClose = (event) => {
+    _handleClose = () => {
         let cleanState = {
             entityToDelete:{},
             showModal:false
@@ -34,33 +33,98 @@ class ModalEliminar extends Component {
         this.setState(cleanState);
     }
 
-    _handleSave = (event) => {
+    _handleSubmit = () => {
         switch (this.state.entityType) {
             case "Pet": {
                 /*---------------AJAX Pet DELETE call--------------*/
-                alert("AJAX outgoing, boiiii");
-                let mockResponse = true;
-                console.log(mockResponse);
+                fetch("http://localhost:8080/api/v1/pet/" + this.state.entityToDelete.id, {
+                    method: "DELETE",
+                    headers: {
+                        "Content-Type": "application/json"
+                    }
+                })
+                    .then(response => {
+                        if (response.ok) {
+                            console.log("Success");
+                            console.log("entityToDelete.id:", this.state.entityToDelete);
+                            this.props.removeEntityFromList(this.state.entityToDelete.id, this.state.entityType);
+                            this._handleClose();
+                        } else {
+                            response.json().then(apiError => {
+                                console.log("Error:", apiError);
+                            })
+                        }
+                    })
+                    .catch(error => {
+                        console.error("Error:", error);
+                    })
+                //alert("AJAX outgoing, boiiii");
                 /*-------------------------------------------*/
                 break;
             }
             case "ContactMedium": {
-                    /*---------------AJAX ContactMedium DELETE call--------------*/
-                    alert("AJAX outgoing, boiiii");
-                    let mockResponse = true;
-                    console.log(mockResponse);
-                    /*-------------------------------------------*/
+                /*---------------AJAX ContactMedium DELETE call--------------*/
+                fetch("http://localhost:8080/api/v1/contactmedium/" + this.state.entityToDelete.id, {
+                    method: "DELETE",
+                    headers: {
+                        "Content-Type": "application/json"
+                    }
+                })
+                    .then(response => {
+                        if (response.ok) {
+                            console.log("Success");
+                            console.log("entityToDelete.id:", this.state.entityToDelete.id);
+                            this.props.removeEntityFromList(this.state.entityToDelete.id, this.state.entityType);
+                            this._handleClose();
+                        } else {
+                            response.json().then(apiError => {
+                                console.log("Error:", apiError);
+                            })
+                        }
+                    })
+                    .catch(error => {
+                        console.error("Error:", error);
+                    })
+                //alert("AJAX outgoing, boiiii");
+                /*-------------------------------------------*/
+                break;
+            }
+            case "Owner": {
+                /*---------------AJAX ContactMedium DELETE call--------------*/
+                fetch("http://localhost:8080/api/v1/owner/" + this.state.entityToDelete.id, {
+                    method: "DELETE",
+                    headers: {
+                        "Content-Type": "application/json"
+                    }
+                })
+                    .then(response => {
+                        if (response.ok) {
+                            console.log("Success");
+                            console.log("entityToDelete.id:", this.state.entityToDelete.id);
+                            this.props.removeEntityFromList(this.state.entityToDelete.id, this.state.entityType);
+                            this._handleClose();
+                        } else {
+                            response.json().then(apiError => {
+                                console.log("Error:", apiError);
+                            })
+                        }
+                    })
+                    .catch(error => {
+                        console.error("Error:", error);
+                    })
+                //alert("AJAX outgoing, boiiii");
+                /*-------------------------------------------*/
                 break;
             }
         }
-        this.props.removeEntityFromList(this.state.entityToDelete.id, this.state.entityType);
-        this._handleClose();
+
     }
 
     renderModalName = () => {
         switch (this.state.entityType) {
             case "Pet": return "Mascota:";
             case "ContactMedium": return "Medio de contacto:";
+            case "Owner": return "Dueño:";
             default: return "";
         }
     }
@@ -93,13 +157,14 @@ class ModalEliminar extends Component {
                             </button>
                         </div>
                         <div className="modal-body">
-                            <form>
+                            <form onSubmit={(e) => e.preventDefault()}>
                                 <strong>
                                     {this.renderModalName()}
                                 </strong>
-                                {Object.keys(this.state.entityToDelete).map(entityKey => {
+                                {Object.keys(this.state.entityToDelete).map((entityKey, index) => {
                                     return(
-                                        <div className="form-group">
+                                        <div key={index}
+                                             className="form-group">
                                             <label htmlFor=""
                                                    className="col-form-label">
                                                    {entityKey}
@@ -122,9 +187,9 @@ class ModalEliminar extends Component {
                                 Cancelar
                             </button>
                             <button type="button"
-                                    className="btn btn-primary"
-                                    onClick={this._handleSave}>
-                                Guardar
+                                    className="btn btn-danger"
+                                    onClick={this._handleSubmit}>
+                                Eliminar
                             </button>
                         </div>
                     </div>

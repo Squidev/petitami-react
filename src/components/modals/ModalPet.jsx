@@ -1,6 +1,7 @@
-import React, {Component} from "react";
+import React, {Component, createRef} from "react";
 import "./ModalStyle.css";
-import * as petAvatar from "../icons/pet-avatar.png";
+import petAvatar from "../icons/pet-avatar.png";
+import ImageCropper from "../ImageCropper";
 
 class ModalPet extends Component {
 
@@ -13,11 +14,11 @@ class ModalPet extends Component {
                 name: "",
                 photo: "",
                 description: "",
-                qrImage: ""
+                ownerId: parseInt(this.props.ownerId)
             },
-            showModal:false
+            showModal:false,
         }
-        this.photo = null;
+        this.modalImageCropper = createRef();
     }
 
     openModal = (pet) => {
@@ -28,11 +29,40 @@ class ModalPet extends Component {
                 showModal: true
             };
         } else {
-            let fileReader = new FileReader();
+            /* Podemos trabajar con una imagen en sus 2 formas:
+                    1. File: A File object inherits from Blob. In addition to Blob methods and properties, File objects also have name and lastModified properties,
+                       plus the internal ability to read from filesystem. We usually get File objects from user input, like <input> or Drag’n’Drop events (ondragend).
+                       Toda imagen estructuralmente es un BLOB (Binary Large Object). Cargando la imagen como file se copiará el archivo al build folder e insertará
+                       links hacia él donde sea incluido.
+                    2. DataURL: El contenido binario será codificado en base64, y el string resultante de esto será insertado directamente donde sea incluida
+                       la imagen, por lo que no existirá un archivo por separado. Si el tamaño de la imagen es muy grande, la función que utilicemos para cargarla como
+                       DataURL automáticamente la cargará como File. Este threshold en el tamaño del archivo es, por lo general, seteable.
+                       Este formato no sólo se utiliza para imágenes.
+                       Data URLs are composed of four parts:
+                         » a prefix (data:)
+                         » a MIME type indicating the type of data
+                         » an optional base64 token if non-textual
+                         » the data itself
+
+                                data:[<mediatype>][;base64],<data>
+
+                       In JavaScript there are two functions respectively for decoding and encoding base64 strings:
+                       btoa(): creates a base-64 encoded ASCII string from a "string" of binary data ("btoa" should be read as "binary to ASCII").
+                       atob(): decodes a base64 encoded string("atob" should be read as "ASCII to binary").
+
+               La ventaja entre usar uno u otro:
+                    A Data URL is a URI scheme that provides a way to inline data in a document as if they were external resources, and it's commonly used to embed
+                    images in HTML and CSS. It is a form of file literal or here document. This technique allows normally separate elements such as images and style
+                    sheets to be fetched in a single Hypertext Transfer Protocol (HTTP) request, which may be more efficient than multiple HTTP requests, and used by
+                    several browser extensions to package images as well as other multimedia contents in a single HTML file for page saving.
+                    Es decir, la segunda forma nos ahorra requests, al costo de incluir un paso extra de codificación/decodificación y un incremento de un 33% (propio de
+                    base64) en el peso total del archivo.
+                */
+
+/*            let fileReader = new FileReader();
             fileReader.onload = (event) => {
                 openState.activePet.photo = event.target.result;
-            //    this.setState(openState, ()=> console.log(this.state.activePet.photo));
-            }
+            }*/
             openState = {
                 activePet: {
                     id: 0,
@@ -40,18 +70,18 @@ class ModalPet extends Component {
                     name: "",
                     photo: "",
                     description: "",
-                    qrImage: ""
+                    ownerId: parseInt(this.props.ownerId)
                 },
                 showModal: true
             }
 
 //            let file = new File()
-            //fileReader.readAsDataURL(petAvatar);
+            //fileReader.readAsDataURL(require("../icons/pet-avatar.png"));
         }
         this.setState(openState);
     }
 
-    _handleClose = (event) => {
+    _handleClose = () => {
         let cleanState = {
             activePet:{
                 id: 0,
@@ -59,31 +89,67 @@ class ModalPet extends Component {
                 name: "",
                 photo: "",
                 description: "",
-                qrImage: ""
+                ownerId: 0
             },
             showModal:false
         };
         this.setState(cleanState, ()=> console.log("Show ModalPet: " + this.state.showModal));
     }
 
-    _handleSave = (event) => {
-
+    _handleSubmit = () => {
+        console.log("Img:", this.state.activePet.photo);
         if (this.state.activePet.id === 0) {
             /*---------------AJAX POST call--------------*/
-            alert("AJAX outgoing, boiiii");
-            let mockResponsePet = {...this.state.activePet, id: 53, uuid: "f684-s6g4e8-6se5g1-6dr85-6dr4g"};
-            console.log(mockResponsePet);
+            fetch("http://localhost:8080/api/v1/pet/", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify(this.state.activePet)
+            })
+                .then(response => {
+                    if (response.ok){
+                        response.json().then(responsePet => {
+                            console.log("Success:", responsePet);
+                            this.props.appendPetToList(responsePet);
+                        });
+                    } else {
+                        response.json().then(apiError => {
+                            console.log("Error:", apiError);
+                        });
+                    }
+                })
+                .catch(error => {
+                    console.error("Error:", error);
+                });
+            //alert("AJAX outgoing, boiiii");
             /*-------------------------------------------*/
-
-            this.props.appendPetToList(mockResponsePet);
         } else {
             /*---------------AJAX PUT call---------------*/
-            alert("AJAX outgoing, boiiii");
-            let mockResponsePet = {...this.state.activePet};
-            console.log(mockResponsePet);
+            fetch("http://localhost:8080/api/v1/pet/" + this.state.activePet.id, {
+                method: "PUT",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify(this.state.activePet)
+            })
+                .then(response => {
+                    if (response.ok){
+                        response.json().then(responsePet => {
+                            console.log("Success:", responsePet);
+                            this.props.modifyPetFromList(responsePet);
+                        });
+                    } else {
+                        response.json().then(apiError => {
+                            console.log("Error:", apiError);
+                        });
+                    }
+                })
+                .catch(error => {
+                    console.error("Error:", error);
+                });
+            //alert("AJAX outgoing, boiiii");
             /*-------------------------------------------*/
-
-            this.props.modifyPetFromList(mockResponsePet);
         }
         this._handleClose();
     }
@@ -95,7 +161,8 @@ class ModalPet extends Component {
                 uuid: this.state.activePet.uuid,
                 name: event.target.value,
                 photo: this.state.activePet.photo,
-                description: this.state.activePet.description
+                description: this.state.activePet.description,
+                ownerId: this.state.activePet.ownerId
             }
         });
         console.log(event.target.value);
@@ -109,6 +176,7 @@ class ModalPet extends Component {
                 name: this.state.activePet.name,
                 photo: this.state.activePet.photo,
                 description: event.target.value,
+                ownerId: this.state.activePet.ownerId
             }
         });
         console.log(event.target.value);
@@ -116,11 +184,19 @@ class ModalPet extends Component {
 
     _handleSelectPetPhoto = (event) => {
         //File selected in the input, returned as a File object
+        let file = event.target.files[0];
+        this._openModalCropper(file);
+    }
+
+/*      El siguiente método recibe el objeto File del input, lo lee como DataURL y guarda la string base64 en el state. Queda obsoleto dado que para croppear la
+        imagen cargada no es posible hacerlo en su formato codificado, por lo que deberemos croppearla ANTES de codificarla.
+        _ObsoleteHandleSelectPetPhoto = (event) => {
+        //File selected in the input, returned as a File object
         this.photo = event.target.files[0];
-        /*The FileReader object lets web applications asynchronously read the contents of files (or raw data buffers) stored on the user's computer, using File or
+        /!*The FileReader object lets web applications asynchronously read the contents of files (or raw data buffers) stored on the user's computer, using File or
          Blob objects to specify the file or data to read.
          File objects may be obtained from a FileList object returned as a result of a user selecting files using the <input> element, from a drag and drop
-         operation's DataTransfer object, or from the mozGetAsFile() API on an HTMLCanvasElement.*/
+         operation's DataTransfer object, or from the mozGetAsFile() API on an HTMLCanvasElement.*!/
         let fileReader = new FileReader();
         //Callback para cuando fileReader termine de leer el file
         fileReader.onload = (event) => {
@@ -134,15 +210,17 @@ class ModalPet extends Component {
         fileReader.readAsDataURL(this.photo);
         console.log("Photo in File object format: ");
         console.log(this.photo);
+    }*/
+
+    _openModalCropper = (file) => {
+        if (this.modalImageCropper.current) this.modalImageCropper.current.openModal(file);
     }
 
-    _handleSelectQrImage = (event) => {
-        let fileReader = new FileReader();
-        fileReader.onload = (event) => {
-            let updatedPetWithQrImage = {...this.state.activePet, qrImage: event.target.result};
-            this.setState({activePet: updatedPetWithQrImage});
-        }
-        fileReader.readAsDataURL(event.target.files[0]);
+    setPhoto = (dataURL) => {
+        let updatedPet = {...this.state.activePet, photo: dataURL};
+        this.setState({
+            activePet: updatedPet
+        });
     }
 
     render() {
@@ -179,10 +257,11 @@ class ModalPet extends Component {
                             </button>
                         </div>
                         <div className="modal-body">
-                            <form>
+                            <form onSubmit={(e) => e.preventDefault()}>
                                 <div className="form-group">
-                                    <label htmlFor="pet-id-number"
-                                           className="col-form-label">
+                                    <label htmlFor="pet-id"
+                                           className="col-form-label"
+                                           hidden={true}>
                                         ID:
                                     </label>
                                     <input readOnly={true}
@@ -190,6 +269,7 @@ class ModalPet extends Component {
                                            className="form-control"
                                            id="pet-id"
                                            value={this.state.activePet.id}
+                                           hidden={true}
                                     />
                                 </div>
                                 <div className="form-group">
@@ -217,7 +297,7 @@ class ModalPet extends Component {
                                     />
                                 </div>
                                 <div className="form-group">
-                                    <label htmlFor="pet-description-text"
+                                    <label htmlFor="pet-description"
                                            className="col-form-label">
                                         Descripción:
                                     </label>
@@ -227,29 +307,21 @@ class ModalPet extends Component {
                                               value={this.state.activePet.description}>
                                     </textarea>
                                 </div>
-                                <div className="d-flex">
+                                <div className="d-flex justify-content-center">
                                     <div className="form-group">
-                                        <label htmlFor="pet-photo-image"
-                                               className="d-block col-form-label">
-                                            Foto:
+                                        <label htmlFor=""
+                                               className="d-flex justify-content-center col-form-label">
+                                            <img id="pet-photo"
+                                                 src={this.state.activePet.photo === "" ? petAvatar : this.state.activePet.photo}
+                                                 height="200"
+                                                 alt="Image preview..."
+                                            />
                                         </label>
-                                        <img src={this.state.activePet.photo} height="200" alt="Image preview..."/>
                                         <input type="file"
                                                className="form-control"
-                                               id="pet-photo"
+                                               id="pet-photo-file"
+                                               accept="image/*"
                                                onChange={this._handleSelectPetPhoto}
-                                        />
-                                    </div>
-                                    <div className="form-group">
-                                        <label htmlFor="pet-qr-image"
-                                               className="d-block col-form-label">
-                                            Código QR:
-                                        </label>
-                                        <img src={this.state.activePet.qrImage} height="200" alt="Image preview..."/>
-                                        <input type="file"
-                                               className="form-control"
-                                               id="pet-qr"
-                                               onChange={this._handleSelectQrImage}
                                         />
                                     </div>
                                 </div>
@@ -262,13 +334,14 @@ class ModalPet extends Component {
                                 Cancelar
                             </button>
                             <button type="button"
-                                    className="btn btn-primary"
-                                    onClick={this._handleSave}>
+                                    className="btn btn-success"
+                                    onClick={this._handleSubmit}>
                                 Guardar
                             </button>
                         </div>
                     </div>
                 </div>
+                <ImageCropper ref={this.modalImageCropper} src={petAvatar} setPhoto={this.setPhoto}/>
             </div>
     );}
 }

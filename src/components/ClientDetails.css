@@ -1,10 +1,23 @@
-.webpage-header {
-    background-color: #F1F1F1;
+#error-message {
     text-align: center;
+    margin-top:100px
+}
+
+.abm-body {
+    min-height:100%;
+    position:relative;
 }
 
 .abm-section {
     margin: 40px 0 40px 0;
+}
+
+.btn a {
+    color: white;
+}
+
+.btn a:hover {
+    color: white;
 }
 
 .short-hr {

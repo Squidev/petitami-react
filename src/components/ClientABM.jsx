@@ -2,43 +2,92 @@ import React, {Component} from "react";
 import "./ClientABM.css";
 import {Link} from "react-router-dom";
 import ModalOwner from "./modals/ModalOwner";
+import ModalEliminar from "./modals/ModalEliminar";
+import PropTypes from "prop-types";
 
 class ClientABM extends Component {
-    state = {owners:[{}]
-    };
 
     constructor(props) {
         super(props);
+        this.state = {
+            owners:[]
+        };
         this.modalOwner = null;
+        this.modalEliminar = null;
     }
 
     componentDidMount = () => {
-        let owner1 = {  ownerId: 1,
-                        ownerDni: 15487544,
-                        ownerName: "Chocoperro Owner"};
-        let owner2 = {  ownerId: 2,
-                        ownerDni: 49781254,
-                        ownerName: "Fluffy Owner"};
-/*        //AJAX request
-        var ajaxRequest = new XMLHttpRequest();
-        ajaxRequest.open("GET", "localhost:8080/api/v1/owner/")
-        ajaxRequest.onload = () => {
-            if (ajaxRequest.status >= 200 && ajaxRequest < 400){
-                this.setState({owners: JSON.parse(ajaxRequest.responseText)});
-                //renderTable(this.state.owners);
-            } else {
-                console.log("Nos conectamos con el server, pero devolvió un error.");
-            }
-        }*/
-        this.setState({owners:[owner1,owner2]});
+        //AJAX request
+        fetch("http://localhost:8080/api/v1/owner/", {
+            method: "GET",
+            headers: {
+                "Content-Type": "application/json",
+            },
+        })
+            .then(response => {
+                if (response.ok) {
+                    // json() devuelve una promesa que será resuelta una vez que la response sea parseada a json
+                    response.json().then(responseOwners => {
+                        console.log("Success:", responseOwners);
+                        this.setState({
+                            owners: responseOwners
+                        })
+                    });
+                } else {
+                    response.json().then(apiError => {
+                        console.log(apiError.message);
+                    })
+                }
+            })
+            .catch(error => {
+                console.error("Error:", error);
+            });
+        //alert("AJAX outgoing, boiiii");
     }
 
     setModalOwnerRef = (element) => {
         this.modalOwner = element;
     }
 
+    setModalEliminarRef = (element) => {
+        this.modalEliminar = element;
+    }
+
     _openModalOwner = (owner) => {
         if (this.modalOwner) this.modalOwner.openModal(owner);
+    }
+
+    _openModalEliminar = (entity, entityType) => {
+        let entityDataToDisplay;
+        switch (entityType) {
+            case "Owner": {
+                entityDataToDisplay = {
+                    id: entity.id,
+                    DNI: entity.dni,
+                    Nombre: entity.name,
+                };
+                break;
+            }
+        }
+        if (this.modalEliminar) this.modalEliminar.openModal(entityDataToDisplay, entityType);
+        console.log(entity);
+    }
+
+    handleNewOwner = (newOwner) => {
+        //Append to list
+        let updatedOwners = [...this.state.owners, newOwner];
+        this.setState({owners: updatedOwners});
+        console.log(newOwner);
+    }
+
+    removeEntityFromList = (entityIdToDelete, entityType) => {
+        switch (entityType) {
+            case "Owner": {
+                let updatedOwners = this.state.owners.filter(owner => owner.id !== entityIdToDelete);
+                this.setState({owners: updatedOwners});
+                break;
+            }
+        }
     }
 
     render() {
@@ -47,7 +96,12 @@ class ClientABM extends Component {
                 <div className="abm-body">
                     <div className="abm-header">
                         <h3>Clientes</h3>
-                        <button id="add-client-button" type="button" className="btn btn-success" onClick={() => this._openModalOwner(null)}>Agregar</button>
+                        <button id="add-client-button"
+                                type="button"
+                                className="btn btn-primary"
+                                onClick={() => this._openModalOwner(null)}>
+                            Agregar
+                        </button>
                     </div>
                     <table className="table">
                         <thead>
@@ -59,28 +113,43 @@ class ClientABM extends Component {
                             </tr>
                         </thead>
                         <tbody>
-                            {this.state.owners.map(owner => {return (<tr>
-                                                                <td hidden="hidden">{owner.ownerId}</td>
-                                                                <td>{owner.ownerName}</td>
-                                                                <td>{owner.ownerDni}</td>
-                                                                <td>
-                                                                    <Link to={"/abm/client/" + owner.ownerId}>
-                                                                        <button type="button" className="btn btn-warning">Ver detalles</button>
-                                                                    </Link>
-                                                                    <Link to={"/abm/client/0"}>
-                                                                        <button type="button" className="btn btn-danger">Eliminar</button>
-                                                                    </Link>
-                                                                </td>
-                                                              </tr>
+                            {this.state.owners.map((owner, index) => {return (
+                                                                <tr key={index}>
+                                                                    <td hidden="hidden">{owner.id}</td>
+                                                                    <td>{owner.name}</td>
+                                                                    <td>{owner.dni}</td>
+                                                                    <td>
+                                                                        <Link to={"/cliente/" + owner.id}>
+                                                                            <button type="button"
+                                                                                    className="btn btn-warning">
+                                                                                Ver detalles
+                                                                            </button>
+                                                                        </Link>
+                                                                        <button type="button"
+                                                                                className="btn btn-danger"
+                                                                                onClick={() => this._openModalEliminar(owner, "Owner")}>
+                                                                            Eliminar
+                                                                        </button>
+                                                                    </td>
+                                                                </tr>
                             );})}
                         </tbody>
                     </table>
                 </div>
 
-                <ModalOwner ref={this.setModalOwnerRef} />
+                <ModalOwner ref={this.setModalOwnerRef} handleNewOwner={this.handleNewOwner} />
+                <ModalEliminar ref={this.setModalEliminarRef} removeEntityFromList={this.removeEntityFromList} />
             </React.Fragment>
         );
     }
 }
 
 export default ClientABM;
+
+ModalOwner.propTypes = {
+    handleNewOwner: PropTypes.func.isRequired
+};
+
+ModalEliminar.propTypes = {
+    removeEntityFromList: PropTypes.func.isRequired
+}
