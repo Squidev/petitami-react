@@ -93,12 +93,13 @@ p{
 
 .contact-medium-logo-module{
   display: flex;
-  align-items: center;
   justify-content: space-evenly;
-  padding: 20px 0 20px 0;
+  padding: 20px 20px 20px 20px;
+  flex-wrap: wrap;
 }
 
 .contact-medium-logo-container{
+  margin: 10px 10px 10px 10px;
   height: 70px;
   width: 70px;
 }
