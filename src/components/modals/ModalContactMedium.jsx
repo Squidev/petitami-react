@@ -21,6 +21,8 @@ class ModalContactMedium extends Component {
             "Email",
             "Dirección"
         ];
+        //this.API_URL = "http://localhost:8080";
+        this.API_URL = "https://petitami.herokuapp.com";
     }
 
     openModal = (contactMedium) => {
@@ -61,7 +63,7 @@ class ModalContactMedium extends Component {
         console.log("activeContactMedium:", this.state.activeContactMedium);
         if (this.state.activeContactMedium.id === 0) {
             /*----------------AJAX call-----------------*/
-            fetch("http://localhost:8080/api/v1/contactmedium/", {
+            fetch(this.API_URL + "/api/v1/contactmedium/", {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json"
@@ -87,7 +89,7 @@ class ModalContactMedium extends Component {
             /*------------------------------------------*/
         } else {
             /*----------------AJAX call-----------------*/
-            fetch("http://localhost:8080/api/v1/contactmedium/" + this.state.activeContactMedium.id, {
+            fetch(this.API_URL + "/api/v1/contactmedium/" + this.state.activeContactMedium.id, {
                 method: "PUT",
                 headers: {
                     "Content-Type": "application/json"

@@ -37,6 +37,8 @@ class ClientDetails extends Component{
         this.modalPet = null;
         this.modalContactMedium = null;
         this.modalEliminar = createRef();
+        //this.API_URL = "http://localhost:8080";
+        this.API_URL = "https://petitami.herokuapp.com";
     }
 
     componentDidMount() {
@@ -46,7 +48,7 @@ class ClientDetails extends Component{
     }
 
     fetchOwner = ownerId => {
-        fetch("http://localhost:8080/api/v1/owner/" + ownerId, {
+        fetch(this.API_URL + "/api/v1/owner/" + ownerId, {
             method: "GET",
             headers: {
                 "Content-Type": "application/json"
@@ -74,7 +76,7 @@ class ClientDetails extends Component{
     }
 
     fetchPets = ownerId => {
-        fetch("http://localhost:8080/api/v1/pet/owner/" + ownerId, {
+        fetch(this.API_URL + "/api/v1/pet/owner/" + ownerId, {
             method: "GET",
             headers: {
                 "Content-Type": "application/json"
@@ -100,7 +102,7 @@ class ClientDetails extends Component{
     }
 
     fetchContactMediums = ownerId => {
-        fetch("http://localhost:8080/api/v1/contactmedium/owner/" + ownerId, {
+        fetch(this.API_URL + "/api/v1/contactmedium/owner/" + ownerId, {
             method: "GET",
             headers: {
                 "Content-Type": "application/json"

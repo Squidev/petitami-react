@@ -12,12 +12,19 @@ function App() {
           <header id="webpage-header">
           </header>
           <main id="webpage-content">
+              {/*How the Router component works :
+              You give the router an history (via the history props), here you use the browserHistory from the same library which is fine:
+              <Router history={browserHistory}>
+              Then you define all the existing routes for your application using the Route component with a path, and the component to load if the browser url match
+              this path property.
+              Router is the common low-level interface for all router components. Typically apps will use one of the high-level routers instead: BrowserRouter,
+              HashRouter, MemoryRouter, NativeRouter, StaticRouter*/}
               <Router>
                       {/*A <Switch> looks through all its children <Route>
-                      elements and renders the first one whose path
+                      elements and only renders the first one whose path
                       matches the current URL. Use a <Switch> any time
                       you have multiple routes, but you want only one
-                      of them to render at a time
+                      of them to render at a time.
                       */}
                       <Switch>
 

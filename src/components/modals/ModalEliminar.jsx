@@ -10,6 +10,8 @@ class ModalEliminar extends Component {
             entityType: "",
             showModal: false
         }
+        //this.API_URL = "http://localhost:8080";
+        this.API_URL = "https://petitami.herokuapp.com";
     }
 
     openModal = (entity, entityType) => {
@@ -37,7 +39,7 @@ class ModalEliminar extends Component {
         switch (this.state.entityType) {
             case "Pet": {
                 /*---------------AJAX Pet DELETE call--------------*/
-                fetch("http://localhost:8080/api/v1/pet/" + this.state.entityToDelete.id, {
+                fetch(this.API_URL + "/api/v1/pet/" + this.state.entityToDelete.id, {
                     method: "DELETE",
                     headers: {
                         "Content-Type": "application/json"
@@ -64,7 +66,7 @@ class ModalEliminar extends Component {
             }
             case "ContactMedium": {
                 /*---------------AJAX ContactMedium DELETE call--------------*/
-                fetch("http://localhost:8080/api/v1/contactmedium/" + this.state.entityToDelete.id, {
+                fetch(this.API_URL + "/api/v1/contactmedium/" + this.state.entityToDelete.id, {
                     method: "DELETE",
                     headers: {
                         "Content-Type": "application/json"
@@ -91,7 +93,7 @@ class ModalEliminar extends Component {
             }
             case "Owner": {
                 /*---------------AJAX ContactMedium DELETE call--------------*/
-                fetch("http://localhost:8080/api/v1/owner/" + this.state.entityToDelete.id, {
+                fetch(this.API_URL + "/api/v1/owner/" + this.state.entityToDelete.id, {
                     method: "DELETE",
                     headers: {
                         "Content-Type": "application/json"

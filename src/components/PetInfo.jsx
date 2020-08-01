@@ -15,6 +15,8 @@ class PetInfo extends Component {
             contactMediums: []
         };
         this.modalCallLocate = createRef();
+        //this.API_URL = "http://localhost:8080";
+        this.API_URL = "https://petitami.herokuapp.com";
     }
 
 
@@ -45,7 +47,7 @@ class PetInfo extends Component {
     }*/
 
     fetchPet = () => {
-        fetch("http://localhost:8080/api/v1/pet/uuid/" + this.props.match.params.uuid, {
+        fetch(this.API_URL + "/api/v1/pet/uuid/" + this.props.match.params.uuid, {
             method: "GET",
             headers: {
                 "Content-Type": "application/json"
@@ -76,7 +78,7 @@ class PetInfo extends Component {
     }
 
     fetchContactMediums = (ownerId) => {
-        fetch("http://localhost:8080/api/v1/contactmedium/owner/" + ownerId, {
+        fetch(this.API_URL + "/api/v1/contactmedium/owner/" + ownerId, {
             method: "GET",
             headers: {
                 "Content-Type": "application/json"

@@ -19,6 +19,8 @@ class ModalPet extends Component {
             showModal:false,
         }
         this.modalImageCropper = createRef();
+        //this.API_URL = "http://localhost:8080";
+        this.API_URL = "https://petitami.herokuapp.com";
     }
 
     openModal = (pet) => {
@@ -100,7 +102,7 @@ class ModalPet extends Component {
         console.log("Img:", this.state.activePet.photo);
         if (this.state.activePet.id === 0) {
             /*---------------AJAX POST call--------------*/
-            fetch("http://localhost:8080/api/v1/pet/", {
+            fetch(this.API_URL + "/api/v1/pet/", {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json"
@@ -126,7 +128,7 @@ class ModalPet extends Component {
             /*-------------------------------------------*/
         } else {
             /*---------------AJAX PUT call---------------*/
-            fetch("http://localhost:8080/api/v1/pet/" + this.state.activePet.id, {
+            fetch(this.API_URL + "/api/v1/pet/" + this.state.activePet.id, {
                 method: "PUT",
                 headers: {
                     "Content-Type": "application/json"

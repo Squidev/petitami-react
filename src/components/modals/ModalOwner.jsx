@@ -19,6 +19,8 @@ class ModalOwner extends Component {
             },
             showModal: false
         };
+        //this.API_URL = "http://localhost:8080";
+        this.API_URL = "https://petitami.herokuapp.com";
     }
 
     componentDidMount() {
@@ -92,7 +94,7 @@ class ModalOwner extends Component {
     _handleSubmit = () => {
         if (this.state.activeOwner.id === 0) {
             /*---------------AJAX POST call--------------*/
-            fetch("http://localhost:8080/api/v1/owner/", {
+            fetch(this.API_URL + "/api/v1/owner/", {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json",
@@ -119,7 +121,7 @@ class ModalOwner extends Component {
             /*-------------------------------------------*/
         } else {
             /*---------------AJAX PUT call---------------*/
-            fetch("http://localhost:8080/api/v1/owner/" + this.state.activeOwner.id, {
+            fetch(this.API_URL + "/api/v1/owner/" + this.state.activeOwner.id, {
                 method: "PUT",
                 headers: {
                     "Content-Type": "application/json",

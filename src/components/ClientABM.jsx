@@ -14,11 +14,13 @@ class ClientABM extends Component {
         };
         this.modalOwner = null;
         this.modalEliminar = null;
+        //this.API_URL = "http://localhost:8080";
+        this.API_URL = "https://petitami.herokuapp.com";
     }
 
     componentDidMount = () => {
         //AJAX request
-        fetch("http://localhost:8080/api/v1/owner/", {
+        fetch(this.API_URL + "/api/v1/owner/", {
             method: "GET",
             headers: {
                 "Content-Type": "application/json",
