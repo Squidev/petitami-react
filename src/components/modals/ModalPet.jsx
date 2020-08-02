@@ -236,7 +236,7 @@ class ModalPet extends Component {
             return null;
         }
         return(
-            <div className="modal backdrop-style d-block"
+            <div className="modal backdrop-style d-block modal-backdrop modal-open"
                  id="pet-modal"
                  tabIndex="-1"
                  role="dialog"

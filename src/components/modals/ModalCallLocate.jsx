@@ -34,7 +34,7 @@ class ModalCallLocate extends Component {
                             <a href={'tel:' + phoneCm.value}>
                                 <div style={{backgroundColor: "rgb(250,246,151)"}}
                                      className="border border-dark call-locate-button d-flex align-items-center">
-                                    <p className="">
+                                    <p>
                                         {phoneCm.value}
                                     </p>
                                 </div>
@@ -48,7 +48,7 @@ class ModalCallLocate extends Component {
                             <a href={'https://maps.google.com/maps?q=' + locationCm.value}>
                                 <div style={{backgroundColor:"rgb(250,246,151)"}}
                                      className="border border-dark call-locate-button d-flex align-items-center">
-                                    <p className="">
+                                    <p>
                                         {locationCm.value}
                                     </p>
                                 </div>

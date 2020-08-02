@@ -1,6 +1,7 @@
 .card-backdrop {
   flex: 1 1 auto;
   display: flex;
+  width: 100%;
   justify-content: center;
   align-items: center;
 }
@@ -41,6 +42,10 @@
   margin: 20px;
 }
 
+.pet-name-container p {
+  font-weight: bold;
+}
+
 .card-header{
   background-color: rgb(250,246,151);
   position: relative;
@@ -58,8 +63,11 @@
   padding: 20px;
   align-items: center;
   align-content: center;
+  flex-wrap: wrap;
   border-bottom: 1px solid;
+  text-align: left;
 }
+
 .card-division img{
   margin: 0 10px 0 -5px;
   padding: 0;
@@ -81,12 +89,17 @@
   justify-content: center;
 }
 
-.pet-bar-button:hover{
+.enabled-button:hover{
   filter: brightness(80%);
   cursor: pointer;
 }
 
+.disabled-button {
+
+}
+
 p{
+  width: 100%;
   padding: 0;
   margin: 0;
 }
@@ -120,15 +133,16 @@ a:hover{
 
 @media only screen and (max-width: 1200px) {
   .card-container {
-    width: 100%;
-    margin: auto;
     padding: 0;
   }
+
 }
 @media only screen and (max-width: 500px) {
   .card-container {
     width: 100%;
-    margin: auto;
-    padding: 0;
+  }
+
+  .card {
+    width: 100%;
   }
 }

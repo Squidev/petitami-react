@@ -95,7 +95,7 @@ class ClientABM extends Component {
     render() {
         return (
             <React.Fragment>
-                <div className="abm-body">
+                <div className="abm-container">
                     <div className="abm-header">
                         <h3>Clientes</h3>
                         <button id="add-client-button"
@@ -121,17 +121,19 @@ class ClientABM extends Component {
                                                                     <td>{owner.name}</td>
                                                                     <td>{owner.dni}</td>
                                                                     <td>
-                                                                        <Link to={"/cliente/" + owner.id}>
+                                                                        <div className="buttons-container">
+                                                                            <Link to={"/cliente/" + owner.id}>
+                                                                                <button type="button"
+                                                                                        className="btn btn-warning">
+                                                                                    Ver detalles
+                                                                                </button>
+                                                                            </Link>
                                                                             <button type="button"
-                                                                                    className="btn btn-warning">
-                                                                                Ver detalles
+                                                                                    className="btn btn-danger"
+                                                                                    onClick={() => this._openModalEliminar(owner, "Owner")}>
+                                                                                Eliminar
                                                                             </button>
-                                                                        </Link>
-                                                                        <button type="button"
-                                                                                className="btn btn-danger"
-                                                                                onClick={() => this._openModalEliminar(owner, "Owner")}>
-                                                                            Eliminar
-                                                                        </button>
+                                                                        </div>
                                                                     </td>
                                                                 </tr>
                             );})}

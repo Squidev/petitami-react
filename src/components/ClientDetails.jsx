@@ -270,15 +270,14 @@ class ClientDetails extends Component{
         }
         return (
             <React.Fragment>
-                <div className="abm-body">
+                <div className="abm-container">
                     <div className="abm-header">
                         <h3>
                             Cliente
                         </h3>
                     </div>
-                    <hr/>
                     <div className="abm-section">
-                        <div className="abm-header">
+                        <div className="abm-section-header">
                             <h4>
                                 Datos personales
                             </h4>
@@ -293,15 +292,13 @@ class ClientDetails extends Component{
                             <label htmlFor="">
                                 DNI: {this.state.owner.dni}
                             </label>
-                            <br/>
                             <label htmlFor="">
                                 Nombre: {this.state.owner.name}
                             </label>
                         </div>
                     </div>
-                    <hr className="short-hr"/>
                     <div className="abm-section">
-                        <div className="abm-header">
+                        <div className="abm-section-header">
                             <h4>
                                 Mascotas
                             </h4>
@@ -345,22 +342,24 @@ class ClientDetails extends Component{
                                                     {pet.uuid}
                                                 </td>
                                                 <td>
-                                                    <Link to={"/pet/" + pet.uuid}>
+                                                    <div className="buttons-container">
+                                                        <Link to={"/pet/" + pet.uuid}>
+                                                            <button type="button"
+                                                                    className="btn btn-primary link-button">
+                                                                Ver perfil
+                                                            </button>
+                                                        </Link>
                                                         <button type="button"
-                                                                className="btn btn-primary link-button">
-                                                            Ver perfil
+                                                                className="btn btn-warning"
+                                                                onClick={() => this._openModalPet(pet)}>
+                                                            Editar
                                                         </button>
-                                                    </Link>
-                                                    <button type="button"
-                                                            className="btn btn-warning"
-                                                            onClick={() => this._openModalPet(pet)}>
-                                                        Editar
-                                                    </button>
-                                                    <button type="button"
-                                                            className="btn btn-danger"
-                                                            onClick={() => this._openModalEliminar(pet, "Pet")}>
-                                                        Eliminar
-                                                    </button>
+                                                        <button type="button"
+                                                                className="btn btn-danger"
+                                                                onClick={() => this._openModalEliminar(pet, "Pet")}>
+                                                            Eliminar
+                                                        </button>
+                                                    </div>
                                                 </td>
                                             </tr>
                                         );
@@ -371,7 +370,7 @@ class ClientDetails extends Component{
                     </div>
                     <hr className="short-hr"/>
                     <div className="abm-section">
-                        <div className="abm-header">
+                        <div className="abm-section-header">
                             <h4>
                                 Medios de contacto
                             </h4>
@@ -415,16 +414,18 @@ class ClientDetails extends Component{
                                                     {contactMedium.value}
                                                 </td>
                                                 <td>
-                                                    <button type="button"
-                                                            className="btn btn-warning"
-                                                            onClick={() => this._openModalContactMedium(contactMedium)}>
-                                                        Editar
-                                                    </button>
-                                                    <button type="button"
-                                                            className="btn btn-danger"
-                                                            onClick={() => this._openModalEliminar(contactMedium, "ContactMedium")}>
-                                                        Eliminar
-                                                    </button>
+                                                    <div className="buttons-container">
+                                                        <button type="button"
+                                                                className="btn btn-warning"
+                                                                onClick={() => this._openModalContactMedium(contactMedium)}>
+                                                            Editar
+                                                        </button>
+                                                        <button type="button"
+                                                                className="btn btn-danger"
+                                                                onClick={() => this._openModalEliminar(contactMedium, "ContactMedium")}>
+                                                            Eliminar
+                                                        </button>
+                                                    </div>
                                                 </td>
                                             </tr>
                                         );

@@ -112,7 +112,7 @@ class PetInfo extends Component {
         if (phones.length>0){
             return (
                 <div style={{backgroundColor:"rgb(250,246,151)"}}
-                     className="pet-bar-button border-top border-dark border-right"
+                     className="pet-bar-button enabled-button border-top border-dark border-right"
                      onClick={() => this.openModalCallLocate(phones)}>
                     <img height="30px"
                          width="auto"
@@ -128,7 +128,7 @@ class PetInfo extends Component {
         } else {
             return (
                 <div style={{backgroundColor:"lightgray"}}
-                     className="pet-bar-button border-top border-dark border-right">
+                     className="pet-bar-button disabled-button border-top border-dark border-right">
                     <img height="30px"
                          width="auto"
                          className=""
@@ -286,7 +286,7 @@ class PetInfo extends Component {
             <React.Fragment>
                 <div className="card-backdrop">
                     <div className="card-container">
-                        <div className="card border-dark bg-light responsive">
+                        <div className="card border-dark bg-light">
                             <div className="card-header border-bottom border-dark">
                                 <div className="pet-image-container float-left">
                                     <img className="pet-image"
@@ -294,9 +294,9 @@ class PetInfo extends Component {
                                          alt="Pet photo"/>
                                 </div>
                                 <div className="pet-name-container d-flex align-content-center justify-content-center">
-                                    <h5>
+                                    <p>
                                         {this.state.name}
-                                    </h5>
+                                    </p>
                                 </div>
                                 <div id="pet-button-bar">
                                     {this.renderCallButton()}
