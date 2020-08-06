@@ -147,7 +147,7 @@ class PetInfo extends Component {
         if (locations.length>0){
             return (
                 <div style={{backgroundColor:"rgb(250,246,151)"}}
-                     className="pet-bar-button border-top border-dark"
+                     className="pet-bar-button enabled-button border-top border-dark"
                      onClick={() => this.openModalCallLocate(locations)}>
                     <img height="30px"
                          width="auto"
@@ -163,7 +163,7 @@ class PetInfo extends Component {
         } else {
         return (
             <div style={{backgroundColor:"lightgray"}}
-                 className="pet-bar-button border-top border-dark">
+                 className="pet-bar-button disabled-button border-top border-dark">
                 <img height="30px"
                      width="auto"
                      className=""

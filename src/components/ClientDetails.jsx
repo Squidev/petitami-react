@@ -297,6 +297,7 @@ class ClientDetails extends Component{
                             </label>
                         </div>
                     </div>
+                    <hr className="short-hr"/>
                     <div className="abm-section">
                         <div className="abm-section-header">
                             <h4>

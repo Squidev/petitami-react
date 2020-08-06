@@ -46,9 +46,11 @@
     color: white;
 }
 
+.short-hr {
+    width: 70%;
+}
+
 table {
-
-
     width: 100%;
 }
 
