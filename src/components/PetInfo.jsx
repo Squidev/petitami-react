@@ -2,6 +2,7 @@ import React, {Component, createRef} from "react";
 import "./Styles.css";
 import ModalCallLocate from "./modals/ModalCallLocate";
 import petAvatar from "./icons/pet-avatar.png";
+import Home from "./Home";
 
 class PetInfo extends Component {
 
@@ -12,7 +13,8 @@ class PetInfo extends Component {
             photo: "",
             description: "",
             ownerId: 0,
-            contactMediums: []
+            contactMediums: [],
+            dataIsLoaded: false
         };
         this.modalCallLocate = createRef();
         //this.API_URL = "http://localhost:8080";
@@ -89,7 +91,8 @@ class PetInfo extends Component {
                     response.json().then(responseContactMediums => {
                         console.log("Success:", responseContactMediums);
                         this.setState({
-                            contactMediums: responseContactMediums
+                            contactMediums: responseContactMediums,
+                            dataIsLoaded: true
                         });
                     });
                 } else {
@@ -282,6 +285,9 @@ class PetInfo extends Component {
     }
 
     render() {
+        if (!this.state.dataIsLoaded) {
+            return (<Home/>);
+        }
         return (
             <React.Fragment>
                 <div className="card-backdrop">
@@ -317,7 +323,6 @@ class PetInfo extends Component {
                         </div>
                     </div>
                 </div>
-
                 <ModalCallLocate ref={this.modalCallLocate} />
             </React.Fragment>
         );
