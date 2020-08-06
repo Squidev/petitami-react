@@ -248,7 +248,7 @@ class PetInfo extends Component {
             return (
                 <div className="card-division contact-medium-logo-module">
                     {socialMedia.filter(cm => {
-                        return cm.type === "Facebook" || cm.type === "Instagram" || cm.type === "Twitter";
+                        return cm.type === "Facebook" || cm.type === "Instagram" || cm.type === "Twitter" || cm.type === "Otro";
                     })
                         .map(cm => {
                             return (

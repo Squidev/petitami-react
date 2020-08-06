@@ -19,7 +19,8 @@ class ModalContactMedium extends Component {
             "Instagram",
             "Twitter",
             "Email",
-            "Dirección"
+            "Dirección",
+            "Otro"
         ];
         //this.API_URL = "http://localhost:8080";
         this.API_URL = "https://petitami.herokuapp.com";
