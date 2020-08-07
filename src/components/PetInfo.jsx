@@ -285,11 +285,12 @@ class PetInfo extends Component {
     }
 
     render() {
-        if (!this.state.dataIsLoaded) {
-            return (<Home/>);
-        }
         return (
             <React.Fragment>
+                <div style={this.state.dataIsLoaded ? {zIndex: "-1", opacity: "0"} : {zIndex: "5", opacity: "100%"}}
+                     className="loading-screen">
+                    <Home/>
+                </div>
                 <div className="card-backdrop">
                     <div className="card-container">
                         <div className="card border-dark bg-light">

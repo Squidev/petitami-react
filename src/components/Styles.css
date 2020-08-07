@@ -146,3 +146,20 @@ a:hover{
     width: 100%;
   }
 }
+
+.loading-screen {
+  display: flex;
+  flex: 1 1 auto;
+  bottom: 0;
+  top: 0;
+  position: absolute;
+  width: 100%;
+  transition: opacity 2s ease-out, z-index 4s ease;
+  justify-content: center;
+  align-items: center;
+  align-self: stretch;
+}
+
+#home-backdrop {
+  align-self: stretch;
+}

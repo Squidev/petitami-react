@@ -14,6 +14,7 @@ html{
   background-color: #282c34;
   text-align: center;
   height: 50px;
+  z-index: 10;
 }
 
 #webpage-content{
@@ -29,6 +30,7 @@ html{
   width: 100%;
   background-color: #282c34;
   color: grey;
+  z-index: 10;
 }
 
 
