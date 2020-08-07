@@ -7,6 +7,7 @@ import ModalEliminar from "./modals/ModalEliminar";
 import PropTypes from "prop-types";
 import {withRouter} from "react-router";
 import {Link} from "react-router-dom";
+import Loader from "react-loader-spinner"
 
 class ClientDetails extends Component{
 
@@ -32,6 +33,9 @@ class ClientDetails extends Component{
                 value:"",
                 ownerId: 0
             }],
+            loadingOwner: true,
+            loadingPets: true,
+            loadingContactMediums: true
         }
         this.modalOwner = createRef();
         this.modalPet = null;
@@ -59,7 +63,8 @@ class ClientDetails extends Component{
                     response.json().then(responseOwner => {
                         console.log("Success:", responseOwner)
                         this.setState({
-                            owner: responseOwner
+                            owner: responseOwner,
+                            loadingOwner: false
                         });
                         this.fetchPets(ownerId);
                         this.fetchContactMediums(ownerId);
@@ -67,6 +72,9 @@ class ClientDetails extends Component{
                 } else {
                     response.json().then(apiError => {
                         console.log("Error:", apiError)
+                        this.setState({
+                            loadingOwner: false
+                        });
                     })
                 }
             })
@@ -87,7 +95,8 @@ class ClientDetails extends Component{
                     response.json().then(responsePets => {
                         console.log("Success:", responsePets);
                         this.setState({
-                            pets: responsePets
+                            pets: responsePets,
+                            loadingPets: false
                         });
                     });
                 } else {
@@ -113,7 +122,8 @@ class ClientDetails extends Component{
                     response.json().then(responseContactMediums => {
                         console.log("Success:", responseContactMediums);
                         this.setState({
-                            contactMediums: responseContactMediums
+                            contactMediums: responseContactMediums,
+                            loadingContactMediums: false
                         });
                     });
                 } else {
@@ -264,19 +274,119 @@ class ClientDetails extends Component{
         this.setState({owner: editedOwner}, () => console.log(this.state.owner));
     }
 
+    renderPetsTableBody = () => {
+        if (this.state.loadingPets) {
+            return (
+                <tbody>
+                    <td colSpan="3" className="loader-container">
+                        <Loader type="ThreeDots" color="#AAAAAA" height="40" width="50" />
+                    </td>
+                </tbody>);
+        }
+        return (
+            <tbody>
+            {this.state.pets.map((pet, index) => {
+                return (
+                    <tr key={index}>
+                        <td hidden="hidden">
+                            {pet.id}
+                        </td>
+                        <td>
+                            {pet.name}
+                        </td>
+                        <td>
+                            {pet.uuid}
+                        </td>
+                        <td>
+                            <div className="buttons-container">
+                                <Link to={"/pet/" + pet.uuid}>
+                                    <button type="button"
+                                            className="btn btn-primary link-button">
+                                        Ver perfil
+                                    </button>
+                                </Link>
+                                <button type="button"
+                                        className="btn btn-warning"
+                                        onClick={() => this._openModalPet(pet)}>
+                                    Editar
+                                </button>
+                                <button type="button"
+                                        className="btn btn-danger"
+                                        onClick={() => this._openModalEliminar(pet, "Pet")}>
+                                    Eliminar
+                                </button>
+                            </div>
+                        </td>
+                    </tr>
+                );
+            })}
+            </tbody>
+        );
+    }
+
+    renderContactMediumsTableBody = () => {
+        if (this.state.loadingContactMediums) {
+            return (
+                <tbody>
+                <td colSpan="3" className="loader-container">
+                    <Loader type="ThreeDots" color="#AAAAAA" height="40" width="50" />
+                </td>
+                </tbody>);
+        }
+        return (
+            <tbody>
+            {this.state.contactMediums.map((contactMedium, index) => {
+                return (
+                    <tr key={index}>
+                        <td hidden="hidden">
+                            {contactMedium.id}
+                        </td>
+                        <td>
+                            {contactMedium.type}
+                        </td>
+                        <td>
+                            {contactMedium.value}
+                        </td>
+                        <td>
+                            <div className="buttons-container">
+                                <button type="button"
+                                        className="btn btn-warning"
+                                        onClick={() => this._openModalContactMedium(contactMedium)}>
+                                    Editar
+                                </button>
+                                <button type="button"
+                                        className="btn btn-danger"
+                                        onClick={() => this._openModalEliminar(contactMedium, "ContactMedium")}>
+                                    Eliminar
+                                </button>
+                            </div>
+                        </td>
+                    </tr>
+                );
+            })}
+            </tbody>
+        );
+    }
+
     render() {
-        if (this.state.owner.id ===0) {
-            return <h2 id="error-message">El ID especificado no corresponde a ningún cliente.</h2>
+        if (this.state.owner.id ===0 && !this.state.loadingOwner) {
+            return <h3 id="error-message">El ID especificado no corresponde a ningún cliente.</h3>
         }
         return (
             <React.Fragment>
+                <div style={this.state.loadingOwner ? {zIndex: "5", opacity: "100%"} : {zIndex: "-1", opacity: "0"}}
+                     className="loading-screen-dots-body">
+                    <div className="loading-screen-dots-container">
+                        <Loader type="ThreeDots" color="#AAAAAA" height="40" width="50" />
+                    </div>
+                </div>
                 <div className="abm-container">
                     <div className="abm-header">
                         <h3>
                             Cliente
                         </h3>
                     </div>
-                    <div className="abm-section">
+                    <div className="abm-section datos-personales-section">
                         <div className="abm-section-header">
                             <h4>
                                 Datos personales
@@ -329,43 +439,7 @@ class ClientDetails extends Component{
                                         </th>
                                     </tr>
                                 </thead>
-                                <tbody>
-                                    {this.state.pets.map((pet, index) => {
-                                        return (
-                                            <tr key={index}>
-                                                <td hidden="hidden">
-                                                    {pet.id}
-                                                </td>
-                                                <td>
-                                                    {pet.name}
-                                                </td>
-                                                <td>
-                                                    {pet.uuid}
-                                                </td>
-                                                <td>
-                                                    <div className="buttons-container">
-                                                        <Link to={"/pet/" + pet.uuid}>
-                                                            <button type="button"
-                                                                    className="btn btn-primary link-button">
-                                                                Ver perfil
-                                                            </button>
-                                                        </Link>
-                                                        <button type="button"
-                                                                className="btn btn-warning"
-                                                                onClick={() => this._openModalPet(pet)}>
-                                                            Editar
-                                                        </button>
-                                                        <button type="button"
-                                                                className="btn btn-danger"
-                                                                onClick={() => this._openModalEliminar(pet, "Pet")}>
-                                                            Eliminar
-                                                        </button>
-                                                    </div>
-                                                </td>
-                                            </tr>
-                                        );
-                                    })}
-                                </tbody>
+                                {this.renderPetsTableBody()}
                             </table>
                         </div>
                     </div>
@@ -401,37 +475,7 @@ class ClientDetails extends Component{
                                         </th>
                                     </tr>
                                 </thead>
-                                <tbody>
-                                    {this.state.contactMediums.map((contactMedium, index) => {
-                                        return (
-                                            <tr key={index}>
-                                                <td hidden="hidden">
-                                                    {contactMedium.id}
-                                                </td>
-                                                <td>
-                                                    {contactMedium.type}
-                                                </td>
-                                                <td>
-                                                    {contactMedium.value}
-                                                </td>
-                                                <td>
-                                                    <div className="buttons-container">
-                                                        <button type="button"
-                                                                className="btn btn-warning"
-                                                                onClick={() => this._openModalContactMedium(contactMedium)}>
-                                                            Editar
-                                                        </button>
-                                                        <button type="button"
-                                                                className="btn btn-danger"
-                                                                onClick={() => this._openModalEliminar(contactMedium, "ContactMedium")}>
-                                                            Eliminar
-                                                        </button>
-                                                    </div>
-                                                </td>
-                                            </tr>
-                                        );
-                                    })}
-                                </tbody>
+                                {this.renderContactMediumsTableBody()}
                             </table>
                         </div>
                     </div>

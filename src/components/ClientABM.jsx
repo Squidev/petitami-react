@@ -4,13 +4,15 @@ import {Link} from "react-router-dom";
 import ModalOwner from "./modals/ModalOwner";
 import ModalEliminar from "./modals/ModalEliminar";
 import PropTypes from "prop-types";
+import Loader from "react-loader-spinner";
 
 class ClientABM extends Component {
 
     constructor(props) {
         super(props);
         this.state = {
-            owners:[]
+            owners:[],
+            loadingOwners: true
         };
         this.modalOwner = null;
         this.modalEliminar = null;
@@ -32,7 +34,8 @@ class ClientABM extends Component {
                     response.json().then(responseOwners => {
                         console.log("Success:", responseOwners);
                         this.setState({
-                            owners: responseOwners
+                            owners: responseOwners,
+                            loadingOwners: false
                         })
                     });
                 } else {
@@ -92,6 +95,43 @@ class ClientABM extends Component {
         }
     }
 
+    renderOwnersTableBody = () => {
+        if (this.state.loadingOwners) {
+            return (
+                <tbody>
+                    <td colSpan="3" className="loader-container">
+                        <Loader type="ThreeDots" color="#AAAAAA" height="40" width="50" />
+                    </td>
+                </tbody>);
+        }
+        return (
+            <tbody>
+            {this.state.owners.map((owner, index) => {return (
+                <tr key={index}>
+                    <td hidden="hidden">{owner.id}</td>
+                    <td>{owner.name}</td>
+                    <td>{owner.dni}</td>
+                    <td>
+                        <div className="buttons-container">
+                            <Link to={"/cliente/" + owner.id}>
+                                <button type="button"
+                                        className="btn btn-warning">
+                                    Ver detalles
+                                </button>
+                            </Link>
+                            <button type="button"
+                                    className="btn btn-danger"
+                                    onClick={() => this._openModalEliminar(owner, "Owner")}>
+                                Eliminar
+                            </button>
+                        </div>
+                    </td>
+                </tr>
+            );})}
+            </tbody>
+        );
+    }
+
     render() {
         return (
             <React.Fragment>
@@ -114,30 +154,7 @@ class ClientABM extends Component {
                                 <th>Acción</th>
                             </tr>
                         </thead>
-                        <tbody>
-                            {this.state.owners.map((owner, index) => {return (
-                                                                <tr key={index}>
-                                                                    <td hidden="hidden">{owner.id}</td>
-                                                                    <td>{owner.name}</td>
-                                                                    <td>{owner.dni}</td>
-                                                                    <td>
-                                                                        <div className="buttons-container">
-                                                                            <Link to={"/cliente/" + owner.id}>
-                                                                                <button type="button"
-                                                                                        className="btn btn-warning">
-                                                                                    Ver detalles
-                                                                                </button>
-                                                                            </Link>
-                                                                            <button type="button"
-                                                                                    className="btn btn-danger"
-                                                                                    onClick={() => this._openModalEliminar(owner, "Owner")}>
-                                                                                Eliminar
-                                                                            </button>
-                                                                        </div>
-                                                                    </td>
-                                                                </tr>
-                            );})}
-                        </tbody>
+                        {this.renderOwnersTableBody()}
                     </table>
                 </div>
 
