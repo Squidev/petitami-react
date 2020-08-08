@@ -345,7 +345,7 @@ class ClientDetails extends Component{
                             {contactMedium.type}
                         </td>
                         <td>
-                            {contactMedium.value}
+                            {contactMedium.type === "Dirección" ? contactMedium.value.split(";;;")[0] : contactMedium.value}
                         </td>
                         <td>
                             <div className="buttons-container">

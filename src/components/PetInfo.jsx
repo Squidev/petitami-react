@@ -232,7 +232,7 @@ class PetInfo extends Component {
                     <div className="text-left">
                         {addresses.map(cm => {return (
                             <p className="">
-                                {cm.value}
+                                {cm.value.split(";;;")[0]}
                             </p>
                         );})}
                     </div>

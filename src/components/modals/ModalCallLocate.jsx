@@ -44,12 +44,13 @@ class ModalCallLocate extends Component {
                 }
                 {this.state.contactMediumsToShow.filter(cm => cm.type === "Dirección")
                     .map(locationCm => {
+                        let [textualAddress, coords] = locationCm.value.split(";;;");
                         return (
-                            <a href={'https://maps.google.com/maps?q=' + locationCm.value}>
+                            <a href={'https://maps.google.com/maps?q=' + coords}>
                                 <div style={{backgroundColor:"rgb(250,246,151)"}}
                                      className="border border-dark call-locate-button d-flex align-items-center">
                                     <p>
-                                        {locationCm.value}
+                                        {textualAddress}
                                     </p>
                                 </div>
                             </a>

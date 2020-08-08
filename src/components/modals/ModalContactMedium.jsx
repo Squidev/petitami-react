@@ -119,15 +119,33 @@ class ModalContactMedium extends Component {
     }
 
     _handleTypeChange = (event) => {
-        this.setState({
-            activeContactMedium:{
-                id: this.state.activeContactMedium.id,
-                type: event.target.value,
-                value: this.state.activeContactMedium.value,
-                ownerId: this.state.activeContactMedium.ownerId
-            }
-        });
-        console.log(event.target.value);
+        if (event.target.value === "Dirección") {
+            this.setState({
+                activeContactMedium: {
+                    id: this.state.activeContactMedium.id,
+                    type: event.target.value,
+                    value: ";;;",
+                    ownerId: this.state.activeContactMedium.ownerId
+                }
+            }, () => {
+                console.log("Type:", this.state.activeContactMedium.type);
+                console.log("Value:", this.state.activeContactMedium.value)
+            });
+            console.log(event.target.value);
+        } else {
+            this.setState({
+                activeContactMedium: {
+                    id: this.state.activeContactMedium.id,
+                    type: event.target.value,
+                    value: "",
+                    ownerId: this.state.activeContactMedium.ownerId
+                }
+            }, () => {
+                console.log("Type:", this.state.activeContactMedium.type);
+                console.log("Value:", this.state.activeContactMedium.value)
+            });
+            console.log(event.target.value);
+        }
     }
 
     _handleValueChange = (event) => {
@@ -140,6 +158,82 @@ class ModalContactMedium extends Component {
             }
         });
         console.log(event.target.value);
+    }
+    _handleValueTextualAddressChange = (event) => {
+        let [textualAddress, coords] = this.state.activeContactMedium.value.split(";;;");
+        this.setState({
+            activeContactMedium:{
+                id: this.state.activeContactMedium.id,
+                type: this.state.activeContactMedium.type,
+                value: event.target.value + ";;;" + coords,
+                ownerId: this.state.activeContactMedium.ownerId
+            }
+        });
+        console.log(event.target.value);
+    }
+
+    _handleValueCoordsChange = (event) => {
+        let [textualAddress, coords] = this.state.activeContactMedium.value.split(";;;");
+        this.setState({
+            activeContactMedium:{
+                id: this.state.activeContactMedium.id,
+                type: this.state.activeContactMedium.type,
+                value: textualAddress + ";;;" + event.target.value,
+                ownerId: this.state.activeContactMedium.ownerId
+            }
+        });
+        console.log(event.target.value);
+    }
+
+    renderContactMediumValue = () => {
+        //Si se trata de una dirección, trataremos al campo value como una combinación de valores "textualAddress;;;coords"
+        if (this.state.activeContactMedium.type === "Dirección") {
+            let [textualAddress, coords] = this.state.activeContactMedium.value.split(";;;");
+            console.log("Inside renderContactMediumValue value.split:", this.state.activeContactMedium.value.split(";;;"));
+            return (
+                <React.Fragment>
+                    <div className="form-group">
+                        <label htmlFor="contact-medium-value-textual-address"
+                               className="col-form-label">
+                            Dirección:
+                        </label>
+                        <input type="text"
+                               className="form-control"
+                               id="contact-medium-value-textual-address"
+                               value={textualAddress}
+                               onChange={this._handleValueTextualAddressChange}
+                        />
+                    </div>
+                    <div className="form-group">
+                        <label htmlFor="contact-medium-value-coords"
+                               className="col-form-label">
+                            Coordenadas:
+                        </label>
+                        <input type="text"
+                               className="form-control"
+                               id="contact-medium-value-coords"
+                               value={coords}
+                               onChange={this._handleValueCoordsChange}
+                        />
+                    </div>
+                </React.Fragment>
+            );
+        } else {
+            return (
+                <div className="form-group">
+                    <label htmlFor="contact-medium-value"
+                           className="col-form-label">
+                        Valor:
+                    </label>
+                    <input type="text"
+                           className="form-control"
+                           id="contact-medium-value"
+                           value={this.state.activeContactMedium.value}
+                           onChange={this._handleValueChange}
+                    />
+                </div>
+            );
+        }
     }
 
     render() {
@@ -206,18 +300,7 @@ class ModalContactMedium extends Component {
                                         {this.supportedTypes.map(type => <option value={type}>{type}</option>)}
                                     </select>
                                 </div>
-                                <div className="form-group">
-                                    <label htmlFor="contact-medium-value-text"
-                                           className="col-form-label">
-                                        Valor:
-                                    </label>
-                                    <input type="text"
-                                           className="form-control"
-                                           id="contact-medium-value"
-                                           value={this.state.activeContactMedium.value}
-                                           onChange={this._handleValueChange}
-                                    />
-                                </div>
+                                {this.renderContactMediumValue()}
                             </form>
                         </div>
                         <div className="modal-footer">
