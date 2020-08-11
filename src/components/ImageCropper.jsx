@@ -35,17 +35,25 @@ class ImageCropper extends Component {
     }
 
     openModal = (file) => {
-        this.setState({
-            imgSrc: URL.createObjectURL(file),
-            showModal: true
-        }, () => this.cropper.replace(this.state.imgSrc))
+        if (file) {
+            this.setState({
+                imgSrc: URL.createObjectURL(file),
+                showModal: true
+            }, () => this.cropper.replace(this.state.imgSrc))
+        }
     }
 
-    _save = () => {
+    _handleSave = () => {
         this.props.setPhoto(this.state.imageDestination);
         this.setState({
             showModal: false
-        })
+        });
+    }
+
+    _handleClose = () => {
+        this.setState({
+            showModal:false,
+        });
     }
 
     render() {
@@ -98,7 +106,7 @@ class ImageCropper extends Component {
                             </button>
                             <button type="button"
                                     className="btn btn-success float-right"
-                                    onClick={this._save}>
+                                    onClick={this._handleSave}>
                                 Guardar
                             </button>
                         </div>
