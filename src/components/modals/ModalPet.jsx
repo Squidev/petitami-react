@@ -2,6 +2,7 @@ import React, {Component, createRef} from "react";
 import "./ModalStyle.css";
 import petAvatar from "../icons/pet-avatar.png";
 import ImageCropper from "../ImageCropper";
+import ModalAjaxRequest from "./ModalAjaxRequest";
 
 class ModalPet extends Component {
 
@@ -17,6 +18,7 @@ class ModalPet extends Component {
                 ownerId: parseInt(this.props.ownerId)
             },
             showModal:false,
+            sendingAjaxRequest: false,
         }
         this.modalImageCropper = createRef();
         //this.API_URL = "http://localhost:8080";
@@ -28,7 +30,8 @@ class ModalPet extends Component {
         if (pet) {
             openState = {
                 activePet: pet,
-                showModal: true
+                showModal: true,
+                sendingAjaxRequest: false
             };
         } else {
             /* Podemos trabajar con una imagen en sus 2 formas:
@@ -74,7 +77,8 @@ class ModalPet extends Component {
                     description: "",
                     ownerId: parseInt(this.props.ownerId)
                 },
-                showModal: true
+                showModal: true,
+                sendingAjaxRequest: false
             }
 
 //            let file = new File()
@@ -93,12 +97,16 @@ class ModalPet extends Component {
                 description: "",
                 ownerId: 0
             },
-            showModal:false
+            showModal:false,
+            sendingAjaxRequest: false,
         };
         this.setState(cleanState, ()=> console.log("Show ModalPet: " + this.state.showModal));
     }
 
     _handleSubmit = () => {
+        this.setState({
+            sendingAjaxRequest: true
+        })
         console.log("Img:", this.state.activePet.photo);
         if (this.state.activePet.id === 0) {
             /*---------------AJAX POST call--------------*/
@@ -114,15 +122,18 @@ class ModalPet extends Component {
                         response.json().then(responsePet => {
                             console.log("Success:", responsePet);
                             this.props.appendPetToList(responsePet);
+                            this._handleClose();
                         });
                     } else {
                         response.json().then(apiError => {
                             console.log("Error:", apiError);
+                            this._handleClose();
                         });
                     }
                 })
                 .catch(error => {
                     console.error("Error:", error);
+                    this._handleClose();
                 });
             //alert("AJAX outgoing, boiiii");
             /*-------------------------------------------*/
@@ -140,20 +151,22 @@ class ModalPet extends Component {
                         response.json().then(responsePet => {
                             console.log("Success:", responsePet);
                             this.props.modifyPetFromList(responsePet);
+                            this._handleClose();
                         });
                     } else {
                         response.json().then(apiError => {
                             console.log("Error:", apiError);
+                            this._handleClose();
                         });
                     }
                 })
                 .catch(error => {
                     console.error("Error:", error);
+                    this._handleClose();
                 });
             //alert("AJAX outgoing, boiiii");
             /*-------------------------------------------*/
         }
-        this._handleClose();
     }
 
     _handleNameChange = (event) => {
@@ -344,6 +357,7 @@ class ModalPet extends Component {
                     </div>
                 </div>
                 <ImageCropper ref={this.modalImageCropper} src={petAvatar} setPhoto={this.setPhoto}/>
+                <ModalAjaxRequest show={this.state.sendingAjaxRequest}/>
             </div>
     );}
 }

@@ -1,5 +1,6 @@
 import React, {Component} from "react";
 import "./ModalStyle.css"
+import ModalAjaxRequest from "./ModalAjaxRequest";
 
 class ModalEliminar extends Component {
 
@@ -8,7 +9,8 @@ class ModalEliminar extends Component {
         this.state = {
             entityToDelete: {},
             entityType: "",
-            showModal: false
+            showModal: false,
+            sendingAjaxRequest: false
         }
         //this.API_URL = "http://localhost:8080";
         this.API_URL = "https://petitami.herokuapp.com";
@@ -20,7 +22,8 @@ class ModalEliminar extends Component {
             openState = {
                 entityToDelete: entity,
                 entityType: entityType,
-                showModal: true
+                showModal: true,
+                sendingAjaxRequest: false
             }
             this.setState(openState);
             console.log("openState:", openState);
@@ -30,12 +33,16 @@ class ModalEliminar extends Component {
     _handleClose = () => {
         let cleanState = {
             entityToDelete:{},
-            showModal:false
+            showModal:false,
+            sendingAjaxRequest: false
         };
         this.setState(cleanState);
     }
 
     _handleSubmit = () => {
+        this.setState({
+            sendingAjaxRequest: true
+        })
         switch (this.state.entityType) {
             case "Pet": {
                 /*---------------AJAX Pet DELETE call--------------*/
@@ -54,11 +61,13 @@ class ModalEliminar extends Component {
                         } else {
                             response.json().then(apiError => {
                                 console.log("Error:", apiError);
+                                this._handleClose();
                             })
                         }
                     })
                     .catch(error => {
                         console.error("Error:", error);
+                        this._handleClose();
                     })
                 //alert("AJAX outgoing, boiiii");
                 /*-------------------------------------------*/
@@ -81,11 +90,13 @@ class ModalEliminar extends Component {
                         } else {
                             response.json().then(apiError => {
                                 console.log("Error:", apiError);
+                                this._handleClose();
                             })
                         }
                     })
                     .catch(error => {
                         console.error("Error:", error);
+                        this._handleClose();
                     })
                 //alert("AJAX outgoing, boiiii");
                 /*-------------------------------------------*/
@@ -108,18 +119,19 @@ class ModalEliminar extends Component {
                         } else {
                             response.json().then(apiError => {
                                 console.log("Error:", apiError);
+                                this._handleClose();
                             })
                         }
                     })
                     .catch(error => {
                         console.error("Error:", error);
+                        this._handleClose();
                     })
                 //alert("AJAX outgoing, boiiii");
                 /*-------------------------------------------*/
                 break;
             }
         }
-
     }
 
     renderModalName = () => {
@@ -196,6 +208,7 @@ class ModalEliminar extends Component {
                         </div>
                     </div>
                 </div>
+                <ModalAjaxRequest show={this.state.sendingAjaxRequest}/>
             </div>
         );
     }

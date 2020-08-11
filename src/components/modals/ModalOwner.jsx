@@ -1,5 +1,6 @@
 import React, {Component} from "react";
-import "./ModalStyle.css"
+import "./ModalStyle.css";
+import ModalAjaxRequest from "./ModalAjaxRequest";
 
 class ModalOwner extends Component {
 
@@ -17,7 +18,8 @@ class ModalOwner extends Component {
                 dni: "",
                 name: ""
             },
-            showModal: false
+            showModal: false,
+            sendingAjaxRequest: false,
         };
         //this.API_URL = "http://localhost:8080";
         this.API_URL = "https://petitami.herokuapp.com";
@@ -31,7 +33,8 @@ class ModalOwner extends Component {
         if (owner) {
             openState = {
                 activeOwner: owner,
-                showModal: true
+                showModal: true,
+                sendingAjaxRequest: false,
             };
         } else {
             openState = {
@@ -40,7 +43,8 @@ class ModalOwner extends Component {
                     dni: "",
                     name: ""
                 },
-                showModal: true
+                showModal: true,
+                sendingAjaxRequest: false,
             }
         }
         this.setState(openState, () => console.log("Show ModalOwner: " + this.state.showModal));
@@ -55,7 +59,8 @@ class ModalOwner extends Component {
                 dni: "",
                 name: ""
             },
-            showModal: false
+            showModal: false,
+            sendingAjaxRequest: false,
         }
         this.setState(cleanState, () => console.log("Show ModalOwner: " + this.state.showModal));
     }
@@ -92,6 +97,9 @@ class ModalOwner extends Component {
     }
 
     _handleSubmit = () => {
+        this.setState({
+            sendingAjaxRequest: true
+        })
         if (this.state.activeOwner.id === 0) {
             /*---------------AJAX POST call--------------*/
             fetch(this.API_URL + "/api/v1/owner/", {
@@ -106,16 +114,19 @@ class ModalOwner extends Component {
                         // json() devuelve una promesa que será resuelta una vez que la response sea parseada a json
                         response.json().then(newOwner => {
                             console.log("Success:", newOwner);
-                            this.props.handleNewOwner(newOwner)
+                            this.props.handleNewOwner(newOwner);
+                            this._handleClose();
                         });
                     } else {
                         response.json().then(apiError => {
                             console.log(apiError.message);
+                            this._handleClose();
                         })
                     }
                 })
                 .catch((error) => {
                     console.error("Error:", error);
+                    this._handleClose();
                 });
             //alert("AJAX outgoing, boiiii");
             /*-------------------------------------------*/
@@ -134,20 +145,22 @@ class ModalOwner extends Component {
                         response.json().then(editedOwner => {
                             console.log("Success:", editedOwner);
                             this.props.handleEditedOwner(editedOwner)
+                            this._handleClose();
                         });
                     } else {
                         response.json().then(apiError => {
                             console.log(apiError.message);
+                            this._handleClose();
                         })
                     }
                 })
                 .catch((error) => {
                     console.error("Error:", error);
+                    this._handleClose();
                 });
             //alert("AJAX outgoing, boiiii");
             /*-------------------------------------------*/
         }
-        this._handleClose();
     }
 
     render() {
@@ -255,6 +268,7 @@ class ModalOwner extends Component {
                         </div>
                     </div>
                 </div>
+                <ModalAjaxRequest show={this.state.sendingAjaxRequest}/>
             </div>
         );
     }

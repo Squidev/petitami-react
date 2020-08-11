@@ -1,4 +1,5 @@
 import React, {Component} from "react";
+import ModalAjaxRequest from "./ModalAjaxRequest";
 
 class ModalContactMedium extends Component {
 
@@ -11,7 +12,8 @@ class ModalContactMedium extends Component {
                 value: "",
                 ownerId: parseInt(this.props.ownerId)
             },
-            showModal:false,
+            showModal: false,
+            sendingAjaxRequest: false
         };
         this.supportedTypes = [
             "Teléfono",
@@ -31,7 +33,8 @@ class ModalContactMedium extends Component {
         if (contactMedium) {
             openState = {
                 activeContactMedium: contactMedium,
-                showModal: true
+                showModal: true,
+                sendingAjaxRequest: false
             };
         } else {
             openState = {
@@ -41,7 +44,8 @@ class ModalContactMedium extends Component {
                     value: "",
                     ownerId: parseInt(this.props.ownerId)
                 },
-                showModal: true
+                showModal: true,
+                sendingAjaxRequest: false
             }
         }
         this.setState(openState, ()=> console.log("Show ModalContactMedium: " + this.state.showModal));
@@ -55,12 +59,16 @@ class ModalContactMedium extends Component {
                 value: "",
                 ownerId: 0
             },
-            showModal:false
+            showModal:false,
+            sendingAjaxRequest: false
         };
         this.setState(cleanState, ()=> console.log("Show ModalPet: " + this.state.showModal));
     }
 
     _handleSave = () => {
+        this.setState({
+            sendingAjaxRequest: true
+        })
         console.log("activeContactMedium:", this.state.activeContactMedium);
         if (this.state.activeContactMedium.id === 0) {
             /*----------------AJAX call-----------------*/
@@ -76,15 +84,18 @@ class ModalContactMedium extends Component {
                         result.json().then(responseContactMedium => {
                             console.log("Success:", responseContactMedium);
                             this.props.appendContactMediumToList(responseContactMedium);
+                            this._handleClose();
                         });
                     } else {
                         result.json().then(apiError => {
                             console.log("Error:", apiError);
+                            this._handleClose();
                         })
                     }
                 })
                 .catch(error => {
                     console.error("Error:", error);
+                    this._handleClose();
                 });
             //alert("AJAX outgoing, boiiii");
             /*------------------------------------------*/
@@ -102,20 +113,22 @@ class ModalContactMedium extends Component {
                         result.json().then(responseContactMedium => {
                             console.log("Success:", responseContactMedium);
                             this.props.modifyContactMediumFromList(responseContactMedium);
+                            this._handleClose();
                         });
                     } else {
                         result.json().then(apiError => {
                             console.log("Error:", apiError);
+                            this._handleClose();
                         })
                     }
                 })
                 .catch(error => {
                     console.error("Error:", error);
+                    this._handleClose();
                 });
             //alert("AJAX outgoing, boiiii");
             /*------------------------------------------*/
         }
-        this._handleClose();
     }
 
     _handleTypeChange = (event) => {
@@ -317,6 +330,7 @@ class ModalContactMedium extends Component {
                         </div>
                     </div>
                 </div>
+                <ModalAjaxRequest show={this.state.sendingAjaxRequest}/>
             </div>
         );
     }
