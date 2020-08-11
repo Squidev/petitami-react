@@ -12,6 +12,8 @@ class ClientABM extends Component {
         super(props);
         this.state = {
             owners:[],
+            dniToFilter: "",
+            filteredByDniOwners:[],
             loadingOwners: true
         };
         this.modalOwner = null;
@@ -35,6 +37,7 @@ class ClientABM extends Component {
                         console.log("Success:", responseOwners);
                         this.setState({
                             owners: responseOwners,
+                            filteredByDniOwners: this.filterByDni(responseOwners, this.state.dniToFilter),
                             loadingOwners: false
                         })
                     });
@@ -95,6 +98,23 @@ class ClientABM extends Component {
         }
     }
 
+    _dniChange = (event) => {
+        this.setState({
+            dniToFilter: event.target.value,
+            filteredByDniOwners: this.filterByDni(this.state.owners, event.target.value)
+        })
+    }
+
+    filterByDni = (owners, dni) => {
+        let ownersToShow;
+        if (dni === "") {
+            ownersToShow = owners;
+        } else {
+            ownersToShow = owners.filter(owner => owner.dni.toString().includes(dni));
+        }
+        return ownersToShow;
+    }
+
     renderOwnersTableBody = () => {
         if (this.state.loadingOwners) {
             return (
@@ -106,7 +126,7 @@ class ClientABM extends Component {
         }
         return (
             <tbody>
-            {this.state.owners.map((owner, index) => {return (
+            {this.state.filteredByDniOwners.map((owner, index) => {return (
                 <tr key={index}>
                     <td hidden="hidden">{owner.id}</td>
                     <td>{owner.name}</td>
@@ -144,6 +164,10 @@ class ClientABM extends Component {
                                 onClick={() => this._openModalOwner(null)}>
                             Agregar
                         </button>
+                        <input type="text"
+                               placeholder="Filtrar por DNI"
+                               onChange={this._dniChange}
+                               value={this.state.dniToFilter}/>
                     </div>
                     <table className="table">
                         <thead>

@@ -278,9 +278,11 @@ class ClientDetails extends Component{
         if (this.state.loadingPets) {
             return (
                 <tbody>
-                    <td colSpan="3" className="loader-container">
-                        <Loader type="ThreeDots" color="#AAAAAA" height="40" width="50" />
-                    </td>
+                    <tr>
+                        <td colSpan="3" className="loader-container">
+                            <Loader type="ThreeDots" color="#AAAAAA" height="40" width="50" />
+                        </td>
+                    </tr>
                 </tbody>);
         }
         return (
@@ -328,9 +330,11 @@ class ClientDetails extends Component{
         if (this.state.loadingContactMediums) {
             return (
                 <tbody>
-                <td colSpan="3" className="loader-container">
-                    <Loader type="ThreeDots" color="#AAAAAA" height="40" width="50" />
-                </td>
+                    <tr>
+                        <td colSpan="3" className="loader-container">
+                            <Loader type="ThreeDots" color="#AAAAAA" height="40" width="50" />
+                        </td>
+                    </tr>
                 </tbody>);
         }
         return (
