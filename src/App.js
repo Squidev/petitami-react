@@ -34,10 +34,10 @@ function App() {
                           {/* Note how these two routes are ordered. The more specific
                           path="/abm/client/:ownerId" comes before path="/abm/client/" so that
                           route will render when viewing an individual owner */}
-                          <Route exact={true} path="/cliente/:id">
+                          <Route exact={true} path="/e5de8b99-6195/cliente/:id">
                               <ClientDetails />
                           </Route>
-                          <Route exact={true} path="/cliente/">
+                          <Route exact={true} path="/e5de8b99-6195/cliente/">
                               <ClientABM />
                           </Route>
 
