@@ -55,7 +55,7 @@ function App() {
           </main>
           <footer id="webpage-footer">
                  <small>
-                     &copy;2020 <a href="http://www.glama.com">Glama</a>
+                     &copy;2020 <a href="http://www.grabital.com">Grabital</a>
                  </small>
           </footer>
       </React.Fragment>
