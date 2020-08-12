@@ -13,7 +13,6 @@ class ClientABM extends Component {
         this.state = {
             owners:[],
             dniToFilter: "",
-            filteredByDniOwners:[],
             loadingOwners: true
         };
         this.modalOwner = null;
@@ -101,7 +100,6 @@ class ClientABM extends Component {
     _dniChange = (event) => {
         this.setState({
             dniToFilter: event.target.value,
-            filteredByDniOwners: this.filterByDni(this.state.owners, event.target.value)
         })
     }
 
@@ -126,27 +124,29 @@ class ClientABM extends Component {
         }
         return (
             <tbody>
-            {this.state.filteredByDniOwners.map((owner, index) => {return (
-                <tr key={index}>
-                    <td hidden="hidden">{owner.id}</td>
-                    <td>{owner.name}</td>
-                    <td>{owner.dni}</td>
-                    <td>
-                        <div className="buttons-container">
-                            <Link to={"/cliente/" + owner.id}>
+            {this.state.owners
+                .filter(owner => owner.dni.toString().includes(this.state.dniToFilter))
+                .map((owner, index) => {return (
+                    <tr key={index}>
+                        <td hidden="hidden">{owner.id}</td>
+                        <td>{owner.name}</td>
+                        <td>{owner.dni}</td>
+                        <td>
+                            <div className="buttons-container">
+                                <Link to={"/e5de8b99-6195/cliente/" + owner.id}>
+                                    <button type="button"
+                                            className="btn btn-warning">
+                                        Ver detalles
+                                    </button>
+                                </Link>
                                 <button type="button"
-                                        className="btn btn-warning">
-                                    Ver detalles
+                                        className="btn btn-danger"
+                                        onClick={() => this._openModalEliminar(owner, "Owner")}>
+                                    Eliminar
                                 </button>
-                            </Link>
-                            <button type="button"
-                                    className="btn btn-danger"
-                                    onClick={() => this._openModalEliminar(owner, "Owner")}>
-                                Eliminar
-                            </button>
-                        </div>
-                    </td>
-                </tr>
+                            </div>
+                        </td>
+                    </tr>
             );})}
             </tbody>
         );

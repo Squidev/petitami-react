@@ -302,7 +302,7 @@ class PetInfo extends Component {
                                 </div>
                                 <div className="pet-name-container d-flex align-content-center justify-content-center">
                                     <p>
-                                        {this.state.name}
+                                        {this.state.name.toUpperCase()}
                                     </p>
                                 </div>
                                 <div id="pet-button-bar">

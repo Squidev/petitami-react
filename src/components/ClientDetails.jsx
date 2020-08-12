@@ -296,7 +296,7 @@ class ClientDetails extends Component{
                         <td>
                             {pet.name}
                         </td>
-                        <td>
+                        <td hidden={true}>
                             {pet.uuid}
                         </td>
                         <td>
@@ -435,7 +435,7 @@ class ClientDetails extends Component{
                                         <th>
                                             Nombre
                                         </th>
-                                        <th>
+                                        <th hidden={true}>
                                             UUID
                                         </th>
                                         <th>

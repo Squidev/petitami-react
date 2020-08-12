@@ -289,13 +289,15 @@ class ModalPet extends Component {
                                 </div>
                                 <div className="form-group">
                                     <label htmlFor="pet-uuid-text"
-                                           className="col-form-label">
+                                           className="col-form-label"
+                                           hidden={true}>
                                         UUID:
                                     </label>
                                     <input readOnly={true}
                                            type="text"
                                            className="form-control"
                                            id="pet-uuid"
+                                           hidden={true}
                                            value={this.state.activePet.uuid}
                                     />
                                 </div>

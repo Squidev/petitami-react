@@ -180,13 +180,15 @@ class ModalEliminar extends Component {
                                         <div key={index}
                                              className="form-group">
                                             <label htmlFor=""
-                                                   className="col-form-label">
+                                                   className="col-form-label"
+                                                   hidden={entityKey === "id"}>
                                                    {entityKey}
                                             </label>
                                             <input readOnly={true}
                                                    type="text"
                                                    className="form-control"
                                                    id=""
+                                                   hidden={entityKey === "id"}
                                                    value={this.state.entityToDelete[entityKey]}
                                             />
                                         </div>
