@@ -21,8 +21,7 @@ class ModalOwner extends Component {
             showModal: false,
             sendingAjaxRequest: false,
         };
-        //this.API_URL = "http://localhost:8080";
-        this.API_URL = "https://petitami.herokuapp.com";
+        this.API_URL = "http://localhost:8080";
     }
 
     componentDidMount() {
@@ -48,8 +47,6 @@ class ModalOwner extends Component {
             }
         }
         this.setState(openState, () => console.log("Show ModalOwner: " + this.state.showModal));
-        //POR QUÉ CARAJOS NO ME MUESTRA EL VALOR ACTUALIZADO EN LA CONSOLA SI LO ESTOY PASANDO COMO CALLBACK?? :@@@@@
-        //AHHHHHH, EL console.log() PELADO NO, PERO ADENTRO DE LA LAMBDA SI, PUTITAH. TODO EL DÍA TRYHARDEANDO EL SETSTATE, NI ELLA ME PUSO TAN DE LA NUCA.
     }
 
     _handleClose = () => {

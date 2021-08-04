@@ -17,8 +17,7 @@ class ClientABM extends Component {
         };
         this.modalOwner = null;
         this.modalEliminar = null;
-        //this.API_URL = "http://localhost:8080";
-        this.API_URL = "https://petitami.herokuapp.com";
+        this.API_URL = "http://localhost:8080";
     }
 
     componentDidMount = () => {
@@ -133,7 +132,7 @@ class ClientABM extends Component {
                         <td>{owner.dni}</td>
                         <td>
                             <div className="buttons-container">
-                                <Link to={"/e5de8b99-6195/cliente/" + owner.id}>
+                                <Link to={"/cliente/" + owner.id}>
                                     <button type="button"
                                             className="btn btn-warning">
                                         Ver detalles

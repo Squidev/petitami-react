@@ -41,8 +41,7 @@ class ClientDetails extends Component{
         this.modalPet = null;
         this.modalContactMedium = null;
         this.modalEliminar = createRef();
-        //this.API_URL = "http://localhost:8080";
-        this.API_URL = "https://petitami.herokuapp.com";
+        this.API_URL = "http://localhost:8080";
     }
 
     componentDidMount() {

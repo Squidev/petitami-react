@@ -24,8 +24,7 @@ class ModalContactMedium extends Component {
             "Dirección",
             "Otro"
         ];
-        //this.API_URL = "http://localhost:8080";
-        this.API_URL = "https://petitami.herokuapp.com";
+        this.API_URL = "http://localhost:8080";
     }
 
     openModal = (contactMedium) => {

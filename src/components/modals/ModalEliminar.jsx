@@ -12,8 +12,7 @@ class ModalEliminar extends Component {
             showModal: false,
             sendingAjaxRequest: false
         }
-        //this.API_URL = "http://localhost:8080";
-        this.API_URL = "https://petitami.herokuapp.com";
+        this.API_URL = "http://localhost:8080";
     }
 
     openModal = (entity, entityType) => {

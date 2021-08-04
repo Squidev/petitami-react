@@ -21,8 +21,7 @@ class ModalPet extends Component {
             sendingAjaxRequest: false,
         }
         this.modalImageCropper = createRef();
-        //this.API_URL = "http://localhost:8080";
-        this.API_URL = "https://petitami.herokuapp.com";
+        this.API_URL = "http://localhost:8080";
     }
 
     openModal = (pet) => {

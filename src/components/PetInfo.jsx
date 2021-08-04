@@ -17,8 +17,7 @@ class PetInfo extends Component {
             dataIsLoaded: false
         };
         this.modalCallLocate = createRef();
-        //this.API_URL = "http://localhost:8080";
-        this.API_URL = "https://petitami.herokuapp.com";
+        this.API_URL = "http://localhost:8080";
     }
 
 
@@ -41,12 +40,6 @@ class PetInfo extends Component {
             ]
         });*/
     }
-
-/* DAFAK THIS DOESN'T WORK MAN
-    getPhoneNumber = () => {
-        var cm = this.state.contactMediums.find(contactMedium => {return contactMedium.type==="Tel";});
-        return cm.type;
-    }*/
 
     fetchPet = () => {
         fetch(this.API_URL + "/api/v1/pet/uuid/" + this.props.match.params.uuid, {
